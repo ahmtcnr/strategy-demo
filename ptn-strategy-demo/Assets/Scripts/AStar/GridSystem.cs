@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoreGrid : MonoBehaviour
+public class GridSystem : MonoBehaviour
 {
     public LayerMask UnwalkableLayer;
     public Vector2 gridBoundSize;

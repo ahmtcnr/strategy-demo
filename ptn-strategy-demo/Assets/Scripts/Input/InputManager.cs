@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[DefaultExecutionOrder(-1)]
 public class InputManager : Singleton<InputManager>
 {
     private InputActions _inputActions;
@@ -11,6 +12,7 @@ public class InputManager : Singleton<InputManager>
 
     protected override void Awake()
     {
+        base.Awake();
         _inputActions = new InputActions();
 
         //TODO: Expensive Cast
@@ -29,6 +31,9 @@ public class InputManager : Singleton<InputManager>
     private void OnDisable()
     {
         _inputActions.Disable();
+
+        _inputActions.Mouse.Click.started -= StartedClick;
+        _inputActions.Mouse.Click.performed -= EndedClick;
     }
 
     private void StartedClick(InputAction.CallbackContext obj)
@@ -42,14 +47,24 @@ public class InputManager : Singleton<InputManager>
         DetectObject();
     }
 
-
+    //TODO: Selection manager
     private void DetectObject()
     {
-        Ray ray = _mainCamera.ScreenPointToRay(_inputActions.Mouse.Position.ReadValue<Vector2>());
+        Ray ray = _mainCamera.ScreenPointToRay(GetMousePosition());
         RaycastHit2D hits2D = Physics2D.GetRayIntersection(ray);
         if (hits2D.collider != null && hits2D.collider.TryGetComponent(out ISelectable _ISelectable))
         {
             _ISelectable.OnClickAction();
         }
+    }
+
+
+    private Vector2 GetMousePosition() => _inputActions.Mouse.Position.ReadValue<Vector2>();
+
+    public Vector3 GetMouseToWorldPosition()
+    {
+        Vector3 mousePosition = GetMousePosition();
+        mousePosition.z = _mainCamera.nearClipPlane;
+        return _mainCamera.ScreenToWorldPoint(mousePosition);
     }
 }

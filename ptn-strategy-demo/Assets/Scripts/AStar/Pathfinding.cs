@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class Pathfinding : MonoBehaviour
 {
-    private CoreGrid _coreGrid;
+    private GridSystem _gridSystem;
 
     [SerializeField] private Transform _transformA;
     [SerializeField] private Transform _transformB;
 
     void Awake()
     {
-        _coreGrid = GetComponent<CoreGrid>();
+        _gridSystem = GetComponent<GridSystem>();
     }
 
     private void Start()
@@ -27,8 +27,8 @@ public class Pathfinding : MonoBehaviour
 
     private void FindPath(Vector2 startPos, Vector2 targetPos)
     {
-        Node startNode = _coreGrid.GetNodeFromWorldPos(startPos);
-        Node targetNode = _coreGrid.GetNodeFromWorldPos(targetPos);
+        Node startNode = _gridSystem.GetNodeFromWorldPos(startPos);
+        Node targetNode = _gridSystem.GetNodeFromWorldPos(targetPos);
         // Node startNode = _coreGrid.grid[0,5];
         // Node targetNode = _coreGrid.grid[0,1];
         
@@ -57,7 +57,7 @@ public class Pathfinding : MonoBehaviour
                 return;
             }
 
-            foreach (var neighbour in _coreGrid.GetNeighbours(currentNode))
+            foreach (var neighbour in _gridSystem.GetNeighbours(currentNode))
             {
                 if (!neighbour.isWalkable || closedNodes.Contains(neighbour))
                 {
@@ -93,7 +93,7 @@ public class Pathfinding : MonoBehaviour
         
         path.Reverse();
         
-        _coreGrid.path = path;
+        _gridSystem.path = path;
     }
 
     private int GetDistance(Node nodeA, Node nodeB)

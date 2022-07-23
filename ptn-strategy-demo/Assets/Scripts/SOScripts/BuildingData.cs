@@ -6,5 +6,6 @@ namespace SOScripts
     public class BuildingData : ScriptableObject
     {
         public Vector2Int buildingSize;
+        public Sprite buildingSprite;
     }
 }

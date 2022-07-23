@@ -1,18 +1,30 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using SOScripts;
 using UnityEngine;
 
-public class BaseBuilding : MonoBehaviour
+public abstract class BaseBuilding : MonoBehaviour, ISelectable
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] public BuildingData buildingData;
+
+    [SerializeField] private Transform spriteParent;
+    
+
+
+    private void Awake()
     {
-        
+        SetBuildingData();
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void OnClickAction()
     {
-        
+    }
+
+    private void SetBuildingData()
+    {
+        spriteParent.localScale = (Vector2)buildingData.buildingSize;
+
     }
 }

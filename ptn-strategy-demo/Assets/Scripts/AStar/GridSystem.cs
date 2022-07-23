@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridSystem : MonoBehaviour
+public class GridSystem : Singleton<GridSystem>
 {
     public LayerMask UnwalkableLayer;
     public Vector2 gridBoundSize;
     public float nodeSize;
-    public Node[,] grid;
+    public Node[,] nodes;
 
     private Vector2Int gridSize;
 
@@ -16,8 +16,9 @@ public class GridSystem : MonoBehaviour
     public List<Node> path = new List<Node>();
 
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         CalculatedGridSize();
         CreateGrid();
     }
@@ -25,7 +26,7 @@ public class GridSystem : MonoBehaviour
 
     private void CreateGrid()
     {
-        grid = new Node[gridSize.x, gridSize.y];
+        nodes = new Node[gridSize.x, gridSize.y];
 
         Vector2 worldBottomLeft = (Vector2)transform.position - Vector2.right * gridBoundSize.x * .5f - Vector2.up * gridBoundSize.y * .5f;
         for (int i = 0; i < gridSize.x; i++)
@@ -33,7 +34,8 @@ public class GridSystem : MonoBehaviour
             for (int j = 0; j < gridSize.y; j++)
             {
                 var nodePos = worldBottomLeft + Vector2.right * (i * nodeDiameter + nodeSize) + Vector2.up * (j * nodeDiameter + nodeSize);
-                grid[i, j] = new Node(true, nodePos,new Vector2Int(i,j));
+
+                nodes[i, j] = new Node(true, nodePos, nodePos + ((Vector2.down + Vector2.left) * nodeSize), new Vector2Int(i, j));
             }
         }
     }
@@ -53,7 +55,7 @@ public class GridSystem : MonoBehaviour
         float percentY = Mathf.Clamp01((worldPos.y + gridBoundSize.y * .5f) / gridBoundSize.y);
         gridIndex.x = Mathf.RoundToInt((gridSize.x - 1) * percentX);
         gridIndex.y = Mathf.RoundToInt((gridSize.y - 1) * percentY);
-        return grid[gridIndex.x, gridIndex.y];
+        return nodes[gridIndex.x, gridIndex.y];
     }
 
     public List<Node> GetNeighbours(Node node)
@@ -71,35 +73,82 @@ public class GridSystem : MonoBehaviour
 
                 if (checkX >= 0 && checkX < gridSize.x && checkY >= 0 && checkY < gridSize.y)
                 {
-                    neighbours.Add(grid[checkX, checkY]);
+                    neighbours.Add(nodes[checkX, checkY]);
                 }
             }
         }
+
         return neighbours;
     }
 
+    public bool IsNodesEmpty( Vector2Int checkSize)
+    {
+        var startNode = GetNodeOnCursor();
+        checkSize += startNode.gridIndex;
+        if (!startNode.isWalkable || checkSize.x > gridSize.x || checkSize.y > gridSize.y)
+            return false;
 
+
+        for (int x = startNode.gridIndex.x; x < checkSize.x; x++)
+        {
+            for (int y = startNode.gridIndex.y; y < checkSize.y; y++)
+            {
+                if (!nodes[x, y].isWalkable)
+                {
+                    Debug.Log("There is a building");
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public void SetNodesWalkableStatus(bool status, Vector2Int nodeDimension)
+    {
+        var startNode = GetNodeOnCursor();
+        nodeDimension += startNode.gridIndex;
+
+        for (int x = startNode.gridIndex.x; x < nodeDimension.x; x++)
+        {
+            for (int y = startNode.gridIndex.y; y < nodeDimension.y; y++)
+            {
+                nodes[x, y].isWalkable = status;
+            }
+        }
+    }
+    
+    
+    public Node GetNodeOnCursor() => GetNodeFromWorldPos(InputManager.Instance.GetMouseToWorldPosition());
+    
     private void OnDrawGizmos()
     {
         //Grid Edges
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position, new Vector2(gridBoundSize.x, gridBoundSize.y));
 
-        if (grid != null)
-        {   
-
-            foreach (var node in grid)
+        if (nodes != null)
+        {
+            foreach (var node in nodes)
             {
-                Gizmos.color = Color.gray;
-                Gizmos.DrawCube(node.worldPos, Vector2.one * (nodeDiameter - .1f));
+                if (!node.isWalkable)
+                {
+                    Gizmos.color = Color.magenta;
+                }
+                else
+                {
+                    Gizmos.color = Color.gray;
+                }
+
+                Gizmos.DrawCube(node.WorldPosition, Vector2.one * (nodeDiameter - .1f));
             }
-            
+
             if (path.Count > 0)
             {
-                for (int i = 0; i < path.Count-1; i++)
+                for (int i = 0; i < path.Count - 1; i++)
                 {
                     Gizmos.color = Color.yellow;
-                    Gizmos.DrawLine(path[i].worldPos, path[i + 1].worldPos);
+                    Gizmos.DrawLine(path[i].WorldPosition, path[i + 1].WorldPosition);
                 }
             }
         }

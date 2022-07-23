@@ -10,6 +10,8 @@ public class InputManager : Singleton<InputManager>
     private InputActions _inputActions;
     private Camera _mainCamera;
 
+    
+    
     protected override void Awake()
     {
         base.Awake();
@@ -38,12 +40,11 @@ public class InputManager : Singleton<InputManager>
 
     private void StartedClick(InputAction.CallbackContext obj)
     {
-        Debug.Log("StartedClick");
+       Actions.OnLeftClick?.Invoke();
     }
 
     private void EndedClick(InputAction.CallbackContext obj)
     {
-        Debug.Log("EndedClick");
         DetectObject();
     }
 

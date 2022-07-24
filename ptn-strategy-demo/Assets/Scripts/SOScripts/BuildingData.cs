@@ -2,10 +2,9 @@
 
 namespace SOScripts
 {
-    [CreateAssetMenu(fileName = "BuildingData", menuName = "Building", order = 0)]
-    public class BuildingData : ScriptableObject
+    [CreateAssetMenu(menuName = "BuildingData", order = 0)]
+    public class BuildingData : BaseUnitData
     {
-        public Vector2Int buildingSize;
-        public Sprite buildingSprite;
+        
     }
 }

@@ -27,7 +27,7 @@ public class BuildingView : MonoBehaviour
 
     public void Build()
     {
-        Actions.OnBuildingUIClick?.Invoke(currentBuilding.buildingData);
+        Actions.OnBuildingUIClick?.Invoke(currentBuilding.baseUnitData);
         Actions.OnBuildingClick?.Invoke(currentBuilding);
     }
 

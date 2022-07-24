@@ -3,14 +3,9 @@ using UnityEngine;
 
 public abstract class BaseBuilding : BaseUnit
 {
-    private void Awake()
+    protected new virtual void Awake()
     {
-        SetBuildingData();
+        base.Awake();
     }
-    private void SetBuildingData()
-    {
-        spriteParent.localScale = (Vector2)baseUnitData.unitSize;
-
-    }
-    
+  
 }

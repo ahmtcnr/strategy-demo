@@ -140,7 +140,7 @@ public class GridSystem : Singleton<GridSystem>
                     Gizmos.color = Color.gray;
                 }
 
-                Gizmos.DrawCube(node.WorldPosition, Vector2.one * (nodeDiameter - .1f));
+                Gizmos.DrawCube(node.WorldPosition, Vector2.one * (nodeDiameter - 0.01f));
             }
 
             if (path.Count > 0)

@@ -51,7 +51,6 @@ public class BuildingIndicatorHandler : MonoBehaviour
     {
         isBuilding = true;
         _spriteRenderer.gameObject.SetActive(true);
-        _spriteParent.localScale = (Vector2)baseUnitData.unitSize;
         _spriteRenderer.sprite = baseUnitData.unitSprite;
 
         if (indicatorRoutine == null)

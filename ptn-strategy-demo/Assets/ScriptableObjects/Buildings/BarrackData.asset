@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2fade2fe3b34eaca49967f76d89798e, type: 3}
   m_Name: BarrackData
   m_EditorClassIdentifier: 
-  unitSize: {x: 2, y: 2}
-  unitSprite: {fileID: 21300000, guid: 06ab0f4ae25fe9c4d838cdb18a3483e0, type: 3}
+  unitSize: {x: 4, y: 4}
+  unitSprite: {fileID: 21300000, guid: acc4ea07a8a26b440af58a23d6374855, type: 3}
   unitName: Barrack
   CurrentHealth: 0
   MaxHealth: 100

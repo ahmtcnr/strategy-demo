@@ -27,7 +27,10 @@ public class InputManager : Singleton<InputManager>
 
         _inputActions.Mouse.Click.started += StartedClick;
         _inputActions.Mouse.Click.performed += EndedClick;
+
     }
+
+  
 
 
     private void OnDisable()
@@ -36,6 +39,7 @@ public class InputManager : Singleton<InputManager>
 
         _inputActions.Mouse.Click.started -= StartedClick;
         _inputActions.Mouse.Click.performed -= EndedClick;
+        
     }
 
     private void StartedClick(InputAction.CallbackContext obj)
@@ -59,7 +63,8 @@ public class InputManager : Singleton<InputManager>
         }
     }
 
-
+     
+    
     private Vector2 GetMousePosition() => _inputActions.Mouse.Position.ReadValue<Vector2>();
 
     public Vector3 GetMouseToWorldPosition()
@@ -67,5 +72,11 @@ public class InputManager : Singleton<InputManager>
         Vector3 mousePosition = GetMousePosition();
         mousePosition.z = _mainCamera.nearClipPlane;
         return _mainCamera.ScreenToWorldPoint(mousePosition);
+    }
+    
+    
+    public Vector2 DeltaPosition()
+    {
+        return _inputActions.Mouse.DeltaPosition.ReadValue<Vector2>();
     }
 }

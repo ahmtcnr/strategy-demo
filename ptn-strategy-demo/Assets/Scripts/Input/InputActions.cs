@@ -44,6 +44,15 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DeltaPosition"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""b2b0f748-3ff4-4fb5-a629-863dbd21a9a6"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -68,6 +77,17 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""action"": ""Position"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ece7eb2f-bda5-4a06-9780-1ab36d61671b"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DeltaPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -78,6 +98,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
         m_Mouse_Click = m_Mouse.FindAction("Click", throwIfNotFound: true);
         m_Mouse_Position = m_Mouse.FindAction("Position", throwIfNotFound: true);
+        m_Mouse_DeltaPosition = m_Mouse.FindAction("DeltaPosition", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -139,12 +160,14 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     private IMouseActions m_MouseActionsCallbackInterface;
     private readonly InputAction m_Mouse_Click;
     private readonly InputAction m_Mouse_Position;
+    private readonly InputAction m_Mouse_DeltaPosition;
     public struct MouseActions
     {
         private @InputActions m_Wrapper;
         public MouseActions(@InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Click => m_Wrapper.m_Mouse_Click;
         public InputAction @Position => m_Wrapper.m_Mouse_Position;
+        public InputAction @DeltaPosition => m_Wrapper.m_Mouse_DeltaPosition;
         public InputActionMap Get() { return m_Wrapper.m_Mouse; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -160,6 +183,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @Position.started -= m_Wrapper.m_MouseActionsCallbackInterface.OnPosition;
                 @Position.performed -= m_Wrapper.m_MouseActionsCallbackInterface.OnPosition;
                 @Position.canceled -= m_Wrapper.m_MouseActionsCallbackInterface.OnPosition;
+                @DeltaPosition.started -= m_Wrapper.m_MouseActionsCallbackInterface.OnDeltaPosition;
+                @DeltaPosition.performed -= m_Wrapper.m_MouseActionsCallbackInterface.OnDeltaPosition;
+                @DeltaPosition.canceled -= m_Wrapper.m_MouseActionsCallbackInterface.OnDeltaPosition;
             }
             m_Wrapper.m_MouseActionsCallbackInterface = instance;
             if (instance != null)
@@ -170,6 +196,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @Position.started += instance.OnPosition;
                 @Position.performed += instance.OnPosition;
                 @Position.canceled += instance.OnPosition;
+                @DeltaPosition.started += instance.OnDeltaPosition;
+                @DeltaPosition.performed += instance.OnDeltaPosition;
+                @DeltaPosition.canceled += instance.OnDeltaPosition;
             }
         }
     }
@@ -178,5 +207,6 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     {
         void OnClick(InputAction.CallbackContext context);
         void OnPosition(InputAction.CallbackContext context);
+        void OnDeltaPosition(InputAction.CallbackContext context);
     }
 }

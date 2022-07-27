@@ -46,6 +46,7 @@ public class ProductionPanel : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
                 for (int i = 0; i < overflowTracker - 1; i++)
                 {
+                    
                     buildingPool.Push(buildings[buildings.Count - 1]);
                     //Destroy(items[items.Count - 1]);
                     buildings.RemoveAt(buildings.Count - 1);

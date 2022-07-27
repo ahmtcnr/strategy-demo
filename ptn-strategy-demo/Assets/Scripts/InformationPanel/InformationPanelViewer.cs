@@ -12,14 +12,12 @@ namespace InformationPanel
     {
         [SerializeField] private Image unitImage;
         [SerializeField] private TMP_Text unitName;
-        [SerializeField] private Image healthBar;
 
 
         public void VisualiseUnitData(InformationPanelData pd)
         {
             unitImage.sprite = pd.UnitSprite;
             unitName.text = pd.UnitText;
-            healthBar.fillAmount = pd.VisualizedHealth;
         }
     }
 }

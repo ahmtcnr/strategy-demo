@@ -8,7 +8,6 @@ namespace SOScripts
         public Sprite unitSprite;
         public string unitName;
         
-        [HideInInspector] public int CurrentHealth;
-        public int MaxHealth;
+       
     }
 }

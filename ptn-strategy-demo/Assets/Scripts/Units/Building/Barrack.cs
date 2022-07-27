@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using Units.Base;
+using UnityEngine;
 
 namespace Building
 {
-    public class Barrack : BaseBuilding
+    public class Barrack : BaseProducer
     {
         
     }

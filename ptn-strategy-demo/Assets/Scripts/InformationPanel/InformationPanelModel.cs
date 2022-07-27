@@ -12,12 +12,8 @@ namespace InformationPanel
 
         public InformationPanelData ProcessInformationPanelData(BaseUnitData bd)
         {
-            var normalizedHealth = bd.CurrentHealth / bd.MaxHealth; //TODO: Prevent divided by zero
-
-
             panelData.UnitSprite = bd.unitSprite;
             panelData.UnitText = bd.unitName;
-            panelData.VisualizedHealth = normalizedHealth;
             return panelData;
         }
     }
@@ -27,6 +23,5 @@ namespace InformationPanel
     {
         public Sprite UnitSprite;
         public string UnitText;
-        public float VisualizedHealth;
     }
 }

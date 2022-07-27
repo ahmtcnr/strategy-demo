@@ -57,7 +57,7 @@ public class InputManager : Singleton<InputManager>
     {
         Ray ray = _mainCamera.ScreenPointToRay(GetMousePosition());
         RaycastHit2D hits2D = Physics2D.GetRayIntersection(ray);
-        if (hits2D.collider != null && hits2D.collider.transform.parent.TryGetComponent(out ISelectable _ISelectable))//TODO: Find another way for .parent
+        if (hits2D.collider != null && hits2D.collider.TryGetComponent(out ISelectable _ISelectable))//TODO: Find another way for .parent
         {
             _ISelectable.OnClickAction();
         }

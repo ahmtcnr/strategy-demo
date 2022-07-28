@@ -81,7 +81,7 @@ public class GridSystem : Singleton<GridSystem>
         return neighbours;
     }
 
-    public bool IsNodesEmpty( Vector2Int checkSize)
+    public bool IsNodesEmpty(Vector2Int checkSize)
     {
         var startNode = GetNodeOnCursor();
         checkSize += startNode.gridIndex;
@@ -95,7 +95,7 @@ public class GridSystem : Singleton<GridSystem>
             {
                 if (!nodes[x, y].isWalkable)
                 {
-                    Debug.Log("There is a building");
+                    //Debug.Log("There is a building");
                     return false;
                 }
             }
@@ -117,10 +117,37 @@ public class GridSystem : Singleton<GridSystem>
             }
         }
     }
-    
-    
-    public Node GetNodeOnCursor() => GetNodeFromWorldPos(InputManager.Instance.GetMouseToWorldPosition());
-    
+
+    public bool TryGetNearestNode(Vector2 worldPos, int checkSize, out Node node)
+    {
+        Node startNode = GetNodeFromWorldPos(worldPos);
+        int checkPositionX = Mathf.Clamp(startNode.gridIndex.x + checkSize, 0, gridSize.x);
+        int checkPositionY = Mathf.Clamp(startNode.gridIndex.y + checkSize, 0, gridSize.y);
+        int startIndexX = Mathf.Clamp(startNode.gridIndex.x - checkSize, 0, gridSize.x);
+        int startIndexY = Mathf.Clamp(startNode.gridIndex.y - checkSize, 0, gridSize.y);
+
+
+        for (int x = startIndexX; x < checkPositionX; x++)
+        {
+            for (int y = startIndexY; y < checkPositionY; y++)
+            {
+                Debug.Log(x + ":" + y);
+                if (nodes[x, y].isWalkable)
+                {
+                    node = nodes[x, y];
+                    return true;
+                }
+            }
+        }
+
+        node = GetNodeFromWorldPos(worldPos);
+        return false;
+    }
+
+
+    public Node GetNodeOnCursor() => GetNodeFromWorldPos(InputInteraction.Instance.GetMouseToWorldPosition());
+
+
     private void OnDrawGizmos()
     {
         //Grid Edges

@@ -20,12 +20,15 @@ namespace InformationPanel
         private void OnEnable()
         {
             Actions.OnUnitSelected += OnClickUnit;
+            Actions.OnDeselectUnit += ClearPanel;
         }
 
         private void OnDisable()
         {
             Actions.OnUnitSelected -= OnClickUnit;
+            Actions.OnDeselectUnit -= ClearPanel;
         }
+
 
         private void OnClickUnit(BaseUnitData bd)
         {
@@ -35,6 +38,10 @@ namespace InformationPanel
             informationPanelView.VisualiseUnitData(_processedData);
             
             
+        }
+        private void ClearPanel()
+        {
+            informationPanelView.ClearPanel();
         }
     }
 }

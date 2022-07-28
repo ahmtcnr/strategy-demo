@@ -3,29 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pathfinding : MonoBehaviour
+public class Pathfinding : Singleton<Pathfinding>
 {
     private GridSystem _gridSystem;
 
     [SerializeField] private Transform _transformA;
     [SerializeField] private Transform _transformB;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _gridSystem = GetComponent<GridSystem>();
     }
 
-    private void Start()
-    {
-        
-    }
 
     private void Update()
     {
         FindPath(_transformA.position, _transformB.position);
     }
 
-    private void FindPath(Vector2 startPos, Vector2 targetPos)
+    public void FindPath(Vector2 startPos, Vector2 targetPos)
     {
         Node startNode = _gridSystem.GetNodeFromWorldPos(startPos);
         Node targetNode = _gridSystem.GetNodeFromWorldPos(targetPos);

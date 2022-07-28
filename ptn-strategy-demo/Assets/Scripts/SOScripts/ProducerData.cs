@@ -7,5 +7,6 @@ namespace SOScripts
     public class ProducerData : BaseUnitData
     {
         public BaseForces forcesToProduce;
+        public Node bannerNode;
     }
 }

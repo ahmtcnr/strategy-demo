@@ -2,7 +2,7 @@
 
 namespace Units.Base
 {
-    public class BaseForces: BaseUnitData
+    public class BaseForces: BaseUnit
     {
         
     }

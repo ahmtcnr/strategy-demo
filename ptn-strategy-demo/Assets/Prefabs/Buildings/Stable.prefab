@@ -48,6 +48,7 @@ MonoBehaviour:
   baseUnitData: {fileID: 11400000, guid: 22f278027ad28594eb4ef58b56490160, type: 2}
   unitSprite: {fileID: 5181330479348868441}
   spriteParent: {fileID: 615877325589183911}
+  forcesToProduce: {fileID: 1594687979709123326, guid: 03ecee65d8234b34e99e5d8941a4c426, type: 3}
 --- !u!61 &3892717612318404544
 BoxCollider2D:
   m_ObjectHideFlags: 0

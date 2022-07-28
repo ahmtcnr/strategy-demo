@@ -1,6 +1,8 @@
-﻿namespace Building
+﻿using Units.Base;
+
+namespace Building
 {
-    public class Stable: BaseBuilding
+    public class Stable: BaseProducer
     {
         
     }

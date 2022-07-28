@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71aa3da4b4107454da8655c422f5d1c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseUnitData: {fileID: 11400000, guid: 1c4d7491cf1959841b1f85e7b0f9dfa4, type: 2}
+  baseUnitData: {fileID: 11400000, guid: 5fba2f27c1fe30d43a8c360ad9dba096, type: 2}
   unitSprite: {fileID: 5181330479348868441}
   spriteParent: {fileID: 615877325589183911}
 --- !u!61 &469723627279483400

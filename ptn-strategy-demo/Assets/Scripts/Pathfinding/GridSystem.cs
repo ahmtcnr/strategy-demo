@@ -52,14 +52,17 @@ public class GridSystem : Singleton<GridSystem>
     }
 
 
-    public Node GetNodeFromWorldPos(Vector2 worldPos)
+    public Node GetNodeFromWorldPos(Vector2 worldPosition)
     {
-        Vector2Int gridIndex = new Vector2Int();
-        float percentX = Mathf.Clamp01((worldPos.x + gridBoundSize.x * .5f) / gridBoundSize.x);
-        float percentY = Mathf.Clamp01((worldPos.y + gridBoundSize.y * .5f) / gridBoundSize.y);
-        gridIndex.x = Mathf.RoundToInt((gridSize.x - 1) * percentX);
-        gridIndex.y = Mathf.RoundToInt((gridSize.y - 1) * percentY);
-        return nodes[gridIndex.x, gridIndex.y];
+        float percentX = (worldPosition.x + gridBoundSize.x / 2) / gridBoundSize.x;
+        float percentY = (worldPosition.y + gridBoundSize.y / 2) / gridBoundSize.y;
+
+        percentX = Mathf.Clamp01(percentX);
+        percentY = Mathf.Clamp01(percentY);
+
+        int x = Mathf.FloorToInt(Mathf.Min(gridSize.x * percentX, gridSize.x - 1));
+        int y = Mathf.FloorToInt(Mathf.Min(gridSize.y * percentY, gridSize.y - 1));
+        return nodes[x, y];
     }
 
     public List<Node> GetNeighbours(Node node)
@@ -122,15 +125,17 @@ public class GridSystem : Singleton<GridSystem>
         }
     }
 
+    private int iterationCount = 0;
 
     public bool TryGetNearestWalkableNode(Vector2 worldPos, out Node node)
     {
         Node startNode = GetNodeFromWorldPos(worldPos);
 
+
         Vector2Int checkIndex = Vector2Int.zero;
         int max = 1;
         int min = -1;
-
+        int maxValue = Mathf.Max(gridSize.x, gridSize.y);
         while (true)
         {
             for (int x = min; x < max; x++)
@@ -140,11 +145,10 @@ public class GridSystem : Singleton<GridSystem>
                     checkIndex.x = x + startNode.gridIndex.x;
                     checkIndex.y = y + startNode.gridIndex.y;
                     if (checkIndex.x < 0 || checkIndex.x >= gridSize.x || checkIndex.y < 0 || checkIndex.y >= gridSize.y)
-                    {
-                        break;
-                    }
+                        continue;
 
-                    if (nodes[checkIndex.x, checkIndex.y].isWalkable)
+
+                    if (nodes[checkIndex.x, checkIndex.y].isWalkable && !nodes[checkIndex.x, checkIndex.y].isReserved)
                     {
                         node = nodes[checkIndex.x, checkIndex.y];
                         return true;
@@ -152,12 +156,17 @@ public class GridSystem : Singleton<GridSystem>
                 }
             }
 
+
             max++;
             min--;
-        }
 
-        node = GetNodeFromWorldPos(worldPos);
-        return false;
+
+            if (min <= -maxValue - 1)
+            {
+                node = null;
+                return false;
+            }
+        }
     }
 
     private void CacheAllNodesNeighbours()

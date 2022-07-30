@@ -19,11 +19,16 @@ public class PathRequestManager : Singleton<PathRequestManager>
         pathfinding = GetComponent<Pathfinding>();
     }
 
-    public static void RequestPath(Vector3 pathStart, Node targetNode, Action<Vector3[], bool> callback)
+    public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, Action<Vector3[], bool> callback)
     {
-        PathRequest newRequest = new PathRequest(pathStart, targetNode, callback);
+        PathRequest newRequest = new PathRequest(pathStart, pathEnd, callback);
         Instance.pathRequestQueue.Enqueue(newRequest);
         Instance.TryProcessNext();
+    }
+
+
+    private void Update()
+    {
     }
 
     void TryProcessNext()
@@ -32,12 +37,15 @@ public class PathRequestManager : Singleton<PathRequestManager>
         {
             currentPathRequest = pathRequestQueue.Dequeue();
             isProcessingPath = true;
-            pathfinding.StartFindPath(currentPathRequest.pathStart, currentPathRequest.targetNode);
+            pathfinding.StartFindPath(currentPathRequest.pathStart, currentPathRequest.pathEnd);
         }
     }
 
     public void FinishedProcessingPath(Vector3[] path, bool success)
     {
+       
+        
+      
         currentPathRequest.callback(path, success);
         isProcessingPath = false;
         TryProcessNext();
@@ -46,13 +54,13 @@ public class PathRequestManager : Singleton<PathRequestManager>
     struct PathRequest
     {
         public Vector3 pathStart;
-        public Node targetNode;
+        public Vector3 pathEnd;
         public Action<Vector3[], bool> callback;
 
-        public PathRequest(Vector3 _start, Node targetNode, Action<Vector3[], bool> _callback)
+        public PathRequest(Vector3 _start, Vector3 _end, Action<Vector3[], bool> _callback)
         {
             pathStart = _start;
-            this.targetNode = targetNode;
+            pathEnd = _end;
             callback = _callback;
             
         }

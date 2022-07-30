@@ -31,54 +31,58 @@ public class Pathfinding : Singleton<Pathfinding>
 
     private void Test()
     {
-        //FindPath(_transformA.position, _transformB.position);
+        StartCoroutine(FindPath(_transformA.position, _transformB.position));
     }
 
-    public void StartFindPath(Vector3 startPos, Node targetNode)
+    public void StartFindPath(Vector3 startPos, Vector3 endPos)
     {
-        StartCoroutine(FindPath(startPos, targetNode));
+        StartCoroutine(FindPath(startPos, endPos));
     }
 
-    private IEnumerator FindPath(Vector2 startPos, Node targetNode)
+    private IEnumerator FindPath(Vector2 startPos, Vector2 endPos)
     {
         Vector3[] waypoints = new Vector3[0];
         bool pathSuccess = false;
 
         Node startNode = _gridSystem.GetNodeFromWorldPos(startPos);
-        if (startNode.isWalkable && targetNode.isWalkable)
-        {
-            Heap<Node> openNodes = new Heap<Node>(_gridSystem.MaxGridSize);
-            HashSet<Node> closedNodes = new HashSet<Node>();
-            openNodes.Add(startNode);
-            while (openNodes.Count > 0)
-            {
-                Node currentNode = openNodes.RemoveFirst();
+        Node targetNode = _gridSystem.GetNodeFromWorldPos(endPos);
 
-                closedNodes.Add(currentNode);
-                if (currentNode == targetNode)
+
+        Heap<Node> openNodes = new Heap<Node>(_gridSystem.MaxGridSize);
+        HashSet<Node> closedNodes = new HashSet<Node>();
+        openNodes.Add(startNode);
+        while (openNodes.Count > 0)
+        {
+            Node currentNode = openNodes.RemoveFirst();
+
+            closedNodes.Add(currentNode);
+            if (currentNode == targetNode)
+            {
+                pathSuccess = true;
+
+                break;
+            }
+
+            foreach (var neighbour in currentNode.neighbours)
+            {
+                if (!neighbour.isWalkable || closedNodes.Contains(neighbour))
                 {
-                    pathSuccess = true;
-                    
-                    break;
+                    continue;
                 }
 
-                foreach (var neighbour in currentNode.neighbours)
+                int movementCostToNeighbour = currentNode.GCost + GetDistance(currentNode, neighbour);
+                if (movementCostToNeighbour < neighbour.GCost || !openNodes.Contains(neighbour))
                 {
-                    if (!neighbour.isWalkable || closedNodes.Contains(neighbour))
+                    neighbour.GCost = movementCostToNeighbour;
+                    neighbour.HCost = GetDistance(neighbour, targetNode);
+                    neighbour.parent = currentNode;
+                    if (!openNodes.Contains(neighbour))
                     {
-                        continue;
+                        openNodes.Add(neighbour);
                     }
-
-                    int movementCostToNeighbour = currentNode.GCost + GetDistance(currentNode, neighbour);
-                    if (movementCostToNeighbour < neighbour.GCost || !openNodes.Contains(neighbour))
+                    else
                     {
-                        neighbour.GCost = movementCostToNeighbour;
-                        neighbour.HCost = GetDistance(neighbour, targetNode);
-                        neighbour.parent = currentNode;
-                        if (!openNodes.Contains(neighbour))
-                        {
-                            openNodes.Add(neighbour);
-                        }
+                        openNodes.UpdateItem(neighbour);
                     }
                 }
             }
@@ -104,25 +108,18 @@ public class Pathfinding : Singleton<Pathfinding>
             currentNode = currentNode.parent;
         }
 
-        Vector3[] waypoints = SimplifyPath(path);
+        Vector3[] waypoints = NodeListToArray(path);
         Array.Reverse(waypoints);
         return waypoints;
     }
 
-    Vector3[] SimplifyPath(List<Node> path)
+    Vector3[] NodeListToArray(List<Node> path)
     {
         List<Vector3> waypoints = new List<Vector3>();
-        Vector2 directionOld = Vector2.zero;
 
-        for (int i = 1; i < path.Count; i++)
+        foreach (var node in path)
         {
-            Vector2 directionNew = new Vector2(path[i - 1].gridIndex.x - path[i].gridIndex.x, path[i - 1].gridIndex.y - path[i].gridIndex.y);
-            if (directionNew != directionOld)
-            {
-                waypoints.Add(path[i].PivotWorldPosition);
-            }
-
-            directionOld = directionNew;
+            waypoints.Add(node.PivotWorldPosition);
         }
 
         return waypoints.ToArray();

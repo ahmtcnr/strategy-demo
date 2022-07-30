@@ -61,6 +61,7 @@ public class BannerHandler : MonoBehaviour
 
         var targetNode = GridSystem.Instance.GetNodeOnCursor();
         _currentProducer.bannerNode = targetNode;
+        Debug.Log(targetNode.gridIndex);
         transform.position = targetNode.PivotWorldPosition;
     }
 }

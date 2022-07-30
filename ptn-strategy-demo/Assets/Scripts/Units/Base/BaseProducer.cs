@@ -8,12 +8,12 @@ namespace Units.Base
         [SerializeField] public BaseForces forcesToProduce;
         
         public Node bannerNode;
+        public Vector3 bannerPosition;
         
         protected override void Awake()
         {
             base.Awake();
             SetBannerToNearestAvailableNode();
-            
            
         }
 
@@ -31,7 +31,7 @@ namespace Units.Base
 
         public void Produce()
         {
-            ForcesFactory.Instance.OnSpawnForces?.Invoke(forcesToProduce,transform.position , bannerNode);
+            ForcesFactory.Instance.OnSpawnForces?.Invoke(forcesToProduce,transform.position , bannerNode.PivotWorldPosition);
         }
 
 

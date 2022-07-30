@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee406cdd87464c8188b4e01bd2d9f26c, type: 3}
   m_Name: PowerPlantData
   m_EditorClassIdentifier: 
-  unitSize: {x: 2, y: 3}
-  unitSprite: {fileID: 21300000, guid: d3d31846f2ca1d748a00acb761415c21, type: 3}
-  unitName: Power Plant
+  UnitSize: {x: 2, y: 3}
+  UnitSprite: {fileID: 21300000, guid: d3d31846f2ca1d748a00acb761415c21, type: 3}
+  UnitName: Power Plant

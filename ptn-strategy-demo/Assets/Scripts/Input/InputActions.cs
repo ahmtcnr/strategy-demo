@@ -110,6 +110,34 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""KeyBoard"",
+            ""id"": ""f3055311-b563-4d12-8de4-e4bbc1d4074e"",
+            ""actions"": [
+                {
+                    ""name"": ""TestKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""57863924-e0e2-4153-a7b5-a271858cfdc0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""b1ff0bf9-b360-42f5-8e05-0daab6d89729"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TestKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -120,6 +148,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_Mouse_RightClick = m_Mouse.FindAction("RightClick", throwIfNotFound: true);
         m_Mouse_Position = m_Mouse.FindAction("Position", throwIfNotFound: true);
         m_Mouse_DeltaPosition = m_Mouse.FindAction("DeltaPosition", throwIfNotFound: true);
+        // KeyBoard
+        m_KeyBoard = asset.FindActionMap("KeyBoard", throwIfNotFound: true);
+        m_KeyBoard_TestKey = m_KeyBoard.FindAction("TestKey", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -232,11 +263,48 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         }
     }
     public MouseActions @Mouse => new MouseActions(this);
+
+    // KeyBoard
+    private readonly InputActionMap m_KeyBoard;
+    private IKeyBoardActions m_KeyBoardActionsCallbackInterface;
+    private readonly InputAction m_KeyBoard_TestKey;
+    public struct KeyBoardActions
+    {
+        private @InputActions m_Wrapper;
+        public KeyBoardActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @TestKey => m_Wrapper.m_KeyBoard_TestKey;
+        public InputActionMap Get() { return m_Wrapper.m_KeyBoard; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(KeyBoardActions set) { return set.Get(); }
+        public void SetCallbacks(IKeyBoardActions instance)
+        {
+            if (m_Wrapper.m_KeyBoardActionsCallbackInterface != null)
+            {
+                @TestKey.started -= m_Wrapper.m_KeyBoardActionsCallbackInterface.OnTestKey;
+                @TestKey.performed -= m_Wrapper.m_KeyBoardActionsCallbackInterface.OnTestKey;
+                @TestKey.canceled -= m_Wrapper.m_KeyBoardActionsCallbackInterface.OnTestKey;
+            }
+            m_Wrapper.m_KeyBoardActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @TestKey.started += instance.OnTestKey;
+                @TestKey.performed += instance.OnTestKey;
+                @TestKey.canceled += instance.OnTestKey;
+            }
+        }
+    }
+    public KeyBoardActions @KeyBoard => new KeyBoardActions(this);
     public interface IMouseActions
     {
         void OnLeftClick(InputAction.CallbackContext context);
         void OnRightClick(InputAction.CallbackContext context);
         void OnPosition(InputAction.CallbackContext context);
         void OnDeltaPosition(InputAction.CallbackContext context);
+    }
+    public interface IKeyBoardActions
+    {
+        void OnTestKey(InputAction.CallbackContext context);
     }
 }

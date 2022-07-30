@@ -38,8 +38,8 @@ namespace Building
         {
             if (!canBuild)
                 return;
-
-            if (GridSystem.Instance.IsNodesEmpty(_currentBuilding.baseUnitData.unitSize))
+            
+            if (GridSystem.Instance.IsNodesEmpty(_currentBuilding.baseUnitData.UnitSize))
             {
                 Actions.OnBuildSuccess?.Invoke(_currentBuilding);
                 Actions.OnDeselectBuilding?.Invoke();

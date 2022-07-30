@@ -17,18 +17,21 @@ public static class Actions
 
     
 
-    public static Action<BaseUnitData> OnUnitSelected;
+    public static Action<BaseUnit> OnUnitSelected;
 
     public static Action OnDeselectUnit;
 
 
 
 
-
+    
+    
+    
     #region InputActions
 
     public static Action OnLeftClick;
     public static Action OnRightClick;
+    public static Action OnSpaceBarDown;
 
     #endregion
 

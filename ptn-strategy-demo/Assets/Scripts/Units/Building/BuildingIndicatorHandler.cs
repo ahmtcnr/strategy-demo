@@ -51,7 +51,7 @@ public class BuildingIndicatorHandler : MonoBehaviour
     {
         isBuilding = true;
         _spriteRenderer.gameObject.SetActive(true);
-        _spriteRenderer.sprite = baseUnitData.unitSprite;
+        _spriteRenderer.sprite = baseUnitData.UnitSprite;
 
         if (indicatorRoutine == null)
         {

@@ -10,10 +10,11 @@ public class BannerHandler : MonoBehaviour
     [SerializeField] private GameObject bannerParent;
 
     private bool canSetBanner;
+    private BaseProducer _currentProducer;
 
     private void Awake()
     {
-        DeactivateBanner();
+        HideBanner();
     }
 
     private void OnEnable()
@@ -21,40 +22,45 @@ public class BannerHandler : MonoBehaviour
         Actions.OnUnitSelected += SetBannerStatus;
 
         Actions.OnRightClick += PlaceBanner;
-
-        Actions.OnDeselectUnit += DeactivateBanner;
     }
 
 
     private void OnDisable()
     {
         Actions.OnUnitSelected -= SetBannerStatus;
-        
-        Actions.OnRightClick -= PlaceBanner;
 
-        Actions.OnDeselectUnit -= DeactivateBanner;
+        Actions.OnRightClick -= PlaceBanner;
     }
 
-    private void DeactivateBanner()
+    private void HideBanner()
     {
         canSetBanner = false;
         bannerParent.SetActive(false);
     }
 
 
-    private void SetBannerStatus(BaseUnitData bd)
+    private void SetBannerStatus(BaseUnit baseUnit)
     {
-        if (bd.GetType() == typeof(ProducerData))
+        if (baseUnit != null && baseUnit.TryGetComponent(out BaseProducer baseProducer))
         {
             bannerParent.SetActive(true);
             canSetBanner = true;
-            transform.position = ((ProducerData)bd).bannerNode.PivotWorldPosition;
+            _currentProducer = baseProducer;
+            transform.position = baseProducer.bannerNode.PivotWorldPosition;
+        }
+        else
+        {
+            HideBanner();
+            return;
         }
     }
 
     private void PlaceBanner()
     {
         if (!canSetBanner) return;
-        transform.position = GridSystem.Instance.GetNodeOnCursor().PivotWorldPosition;
+
+        var targetNode = GridSystem.Instance.GetNodeOnCursor();
+        _currentProducer.bannerNode = targetNode;
+        transform.position = targetNode.PivotWorldPosition;
     }
 }

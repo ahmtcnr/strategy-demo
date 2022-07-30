@@ -19,6 +19,6 @@ public class BuildingSystem : MonoBehaviour
     {
        Instantiate(currentBuilding, GridSystem.Instance.GetNodeOnCursor().PivotWorldPosition, Quaternion.identity);
 
-        GridSystem.Instance.SetNodesWalkableStatus(false, currentBuilding.baseUnitData.unitSize);
+        GridSystem.Instance.SetNodesWalkableStatus(false, currentBuilding.baseUnitData.UnitSize);
     }
 }

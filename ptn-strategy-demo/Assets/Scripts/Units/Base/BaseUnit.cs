@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using SOScripts;
+using Units.Base;
 using UnityEngine;
 
 public abstract class BaseUnit : MonoBehaviour, ISelectable
@@ -15,20 +16,20 @@ public abstract class BaseUnit : MonoBehaviour, ISelectable
    
     protected virtual void Awake()
     {
-        unitSprite.sprite = baseUnitData.unitSprite;
+        unitSprite.sprite = baseUnitData.UnitSprite;
         SetColliderSize();
     }
 
     public void OnClickAction()
     {
-        Actions.OnUnitSelected?.Invoke(baseUnitData);
+        Actions.OnUnitSelected?.Invoke(this);
     }
     
     private void SetColliderSize()
     {
         _boxCollider2D = GetComponent<BoxCollider2D>();
-        _boxCollider2D.size = baseUnitData.unitSize;
-        _boxCollider2D.offset = (Vector2)baseUnitData.unitSize / 2;
+        _boxCollider2D.size = baseUnitData.UnitSize;
+        _boxCollider2D.offset = (Vector2)baseUnitData.UnitSize / 2;
     }
 
 }

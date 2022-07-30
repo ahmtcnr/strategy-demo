@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2fade2fe3b34eaca49967f76d89798e, type: 3}
   m_Name: StableData
   m_EditorClassIdentifier: 
-  unitSize: {x: 2, y: 4}
-  unitSprite: {fileID: 21300000, guid: a06461f15359d2a499576f77ac20f60a, type: 3}
-  unitName: Stable
+  UnitSize: {x: 2, y: 4}
+  UnitSprite: {fileID: 21300000, guid: a06461f15359d2a499576f77ac20f60a, type: 3}
+  UnitName: Stable
   forcesToProduce: {fileID: 1594687979709123326, guid: 03ecee65d8234b34e99e5d8941a4c426, type: 3}

@@ -20,6 +20,8 @@ public class InputManager : Singleton<InputManager>
 
         _inputActions.Mouse.LeftClick.started += StartedLeftClick;
         _inputActions.Mouse.RightClick.started += StartRightClick;
+
+        _inputActions.KeyBoard.TestKey.started += SpaceButtonDown;
     }
 
 
@@ -29,6 +31,13 @@ public class InputManager : Singleton<InputManager>
 
         _inputActions.Mouse.LeftClick.started -= StartedLeftClick;
         _inputActions.Mouse.RightClick.started -= StartRightClick;
+        
+        _inputActions.KeyBoard.TestKey.started -= SpaceButtonDown;
+    }
+
+    private void SpaceButtonDown(InputAction.CallbackContext obj)
+    {
+        Actions.OnSpaceBarDown?.Invoke();
     }
 
     private void StartRightClick(InputAction.CallbackContext obj)
@@ -48,4 +57,6 @@ public class InputManager : Singleton<InputManager>
     {
         return _inputActions.Mouse.DeltaPosition.ReadValue<Vector2>();
     }
+    
+    
 }

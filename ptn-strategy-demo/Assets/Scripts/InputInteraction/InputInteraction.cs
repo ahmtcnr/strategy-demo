@@ -34,9 +34,9 @@ public class InputInteraction : Singleton<InputInteraction>
         {
             _ISelectable.OnClickAction();
         }
-        else
+        else if(hits2D.collider != null && hits2D.collider.name == "Ground")
         {
-            Actions.OnDeselectUnit?.Invoke();
+            Actions.OnUnitSelected?.Invoke(null);
         }
     }
     

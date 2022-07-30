@@ -6,19 +6,22 @@ namespace Units.Base
     public class BaseProducer: BaseBuilding
     {
         [SerializeField] public BaseForces forcesToProduce;
-
+        
+        public Node bannerNode;
+        
         protected override void Awake()
         {
             base.Awake();
             SetBannerToNearestAvailableNode();
+            
+           
         }
 
         private void SetBannerToNearestAvailableNode()
         {
-            if (GridSystem.Instance.TryGetNearestNode(transform.position,3,out Node node))
+            if (GridSystem.Instance.TryGetNearestWalkableNode(transform.position,out Node node))
             {
-                ((ProducerData)baseUnitData).bannerNode = node;
-                Debug.Log(node.gridIndex);
+                bannerNode = node;
             }
             else
             {
@@ -28,7 +31,7 @@ namespace Units.Base
 
         public void Produce()
         {
-            //TODO: Implement produce method here
+            ForcesFactory.Instance.OnSpawnForces?.Invoke(forcesToProduce,transform.position , bannerNode);
         }
 
 

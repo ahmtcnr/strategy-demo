@@ -1,2 +1,0 @@
-C:\Users\ahmtc\Desktop\git-unity\ptn-strategy-demo\ptn-strategy-demo\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
-C:\Users\ahmtc\Desktop\git-unity\ptn-strategy-demo\ptn-strategy-demo\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache

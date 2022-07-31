@@ -7,8 +7,6 @@ using Debug = UnityEngine.Debug;
 
 public class Pathfinding : Singleton<Pathfinding>
 {
-    [SerializeField] private Transform _transformA;
-    [SerializeField] private Transform _transformB;
 
     private GridSystem _gridSystem;
 
@@ -16,22 +14,6 @@ public class Pathfinding : Singleton<Pathfinding>
     private void Start()
     {
         _gridSystem = GridSystem.Instance;
-    }
-
-
-    private void OnEnable()
-    {
-        Actions.OnSpaceBarDown += Test;
-    }
-
-    private void OnDisable()
-    {
-        Actions.OnSpaceBarDown -= Test;
-    }
-
-    private void Test()
-    {
-        StartCoroutine(FindPath(_transformA.position, _transformB.position));
     }
 
     public void StartFindPath(Vector3 startPos, Vector3 endPos)

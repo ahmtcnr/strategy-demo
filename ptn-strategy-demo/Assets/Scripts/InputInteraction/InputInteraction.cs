@@ -6,7 +6,7 @@ using UnityEngine;
 public class InputInteraction : Singleton<InputInteraction>
 {
     private Camera _mainCamera;
-    private RaycastHit2D[] _raycastResults = new RaycastHit2D[1];
+    private RaycastHit2D[] _raycastResults;
 
     protected override void Awake()
     {
@@ -28,19 +28,29 @@ public class InputInteraction : Singleton<InputInteraction>
     private void DetectObject()
     {
         Ray ray = _mainCamera.ScreenPointToRay(InputManager.Instance.GetMousePosition());
-        Physics2D.RaycastNonAlloc(ray.origin, ray.direction, _raycastResults);
+        _raycastResults = Physics2D.RaycastAll(ray.origin, ray.origin);
 
-        if (!Equals(_raycastResults[0].collider, null))
+
+        foreach (var result in _raycastResults)
         {
-            if (_raycastResults[0].collider.TryGetComponent(out ISelectable _ISelectable))
+            if (!Equals(result.collider, null))
             {
-                _ISelectable.OnClickAction();
-                //break;
+                if (result.collider.TryGetComponent(out ISelectable _ISelectable))
+                {
+                    _ISelectable.OnClickAction();
+
+                    break;
+                }
+                else
+                {
+                    Actions.OnLeftClickGround?.Invoke();
+                    Actions.OnUnitDeselected?.Invoke();
+                }
             }
             else
             {
-                Actions.OnUnitDeselected?.Invoke();
                 Actions.OnUnitSelected?.Invoke(null);
+                Actions.OnDeselectBuilding?.Invoke();
             }
         }
 

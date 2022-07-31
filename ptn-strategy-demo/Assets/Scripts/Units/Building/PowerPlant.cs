@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Units.Base;
 using UnityEngine;
 
-public class PowerPlant : BaseAuraCaster
+public class PowerPlant : BaseEffigy
 {   
   
 

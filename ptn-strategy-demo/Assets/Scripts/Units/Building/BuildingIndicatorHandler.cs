@@ -9,12 +9,17 @@ public class BuildingIndicatorHandler : MonoBehaviour
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private Transform _spriteParent;
 
-        [SerializeField] private LayerMask unitLayer;
+    [SerializeField] private LayerMask unitLayer;
     private bool isBuilding;
     private Coroutine indicatorRoutine;
     private BaseUnitData _currentUnitData;
 
     private Vector3 _cursorpos;
+
+    private Collider2D[] results = new Collider2D[1];
+
+    private Color forbiddenToBuildColor = Color.red;
+    private Color safeToBuildColor = Color.green;
 
     private void Awake()
     {
@@ -42,19 +47,21 @@ public class BuildingIndicatorHandler : MonoBehaviour
         }
     }
 
+
     void MyCollisions()
     {
         _cursorpos = GridSystem.Instance.GetNodeOnCursor().PivotWorldPosition;
-        Collider2D hitColliders =
-            Physics2D.OverlapBox((Vector2)_cursorpos + _currentUnitData.UnitSize / 2, _currentUnitData.UnitSize / 2, 0,unitLayer);
-        int i = 0;
-        if (hitColliders != null)
+
+        Physics2D.OverlapBoxNonAlloc((Vector2)_cursorpos + _currentUnitData.UnitSize / 2, _currentUnitData.UnitSize / 2, 0, results, unitLayer);
+
+        if (!Equals(results[0], null))
         {
-            _spriteRenderer.color = Color.red;
+            results[0] = null;
+            _spriteRenderer.color = forbiddenToBuildColor;
         }
         else
         {
-            _spriteRenderer.color = Color.green;
+            _spriteRenderer.color = safeToBuildColor;
         }
     }
 

@@ -19,6 +19,7 @@ public static class Actions
 
     public static Action OnUnitDeselected;
 
+    public static Action OnLeftClickGround;
 
 
 

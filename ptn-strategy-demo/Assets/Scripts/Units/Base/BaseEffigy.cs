@@ -1,6 +1,6 @@
 ﻿namespace Units.Base
 {
-    public class BaseAuraCaster: BaseBuilding
+    public class BaseEffigy: BaseBuilding
     {
         
     }

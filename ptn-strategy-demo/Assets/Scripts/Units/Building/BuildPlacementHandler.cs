@@ -12,14 +12,14 @@ namespace Building
         private void OnEnable()
         {
             Actions.OnBuildingClick += SetBuildStatus;
-            Actions.OnLeftClick += CheckConditions;
+            Actions.OnLeftClickGround += CheckConditions;
             Actions.OnDeselectBuilding += Deselect;
         }
 
         private void OnDisable()
         {
             Actions.OnBuildingClick -= SetBuildStatus;
-            Actions.OnLeftClick -= CheckConditions;
+            Actions.OnLeftClickGround -= CheckConditions;
             Actions.OnDeselectBuilding -= Deselect;
         }
 
@@ -42,11 +42,11 @@ namespace Building
                 return;
 
 
-            Collider2D hitColliders =
-                Physics2D.OverlapBox((Vector2)GridSystem.Instance.GetNodeOnCursor().PivotWorldPosition + _currentBuilding.baseUnitData.UnitSize / 2,
-                    _currentBuilding.baseUnitData.UnitSize / 2, 0,
-                    unitLayer);
-            if (hitColliders == null)
+            Collider2D hitColliders = Physics2D.OverlapBox(
+                (Vector2)GridSystem.Instance.GetNodeOnCursor().PivotWorldPosition + _currentBuilding.baseUnitData.UnitSize / 2,
+                _currentBuilding.baseUnitData.UnitSize / 2, 0,
+                unitLayer);
+            if (hitColliders == null && GridSystem.Instance.IsNodesEmpty(_currentBuilding.baseUnitData.UnitSize))
             {
                 Actions.OnBuildSuccess?.Invoke(_currentBuilding);
                 Actions.OnDeselectBuilding?.Invoke();

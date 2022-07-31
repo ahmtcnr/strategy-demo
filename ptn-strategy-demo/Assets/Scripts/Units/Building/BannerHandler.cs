@@ -22,6 +22,8 @@ public class BannerHandler : MonoBehaviour
         Actions.OnUnitSelected += SetBannerStatus;
 
         Actions.OnRightClick += PlaceBanner;
+
+        Actions.OnUnitDeselected += HideBanner;
     }
 
 
@@ -30,6 +32,8 @@ public class BannerHandler : MonoBehaviour
         Actions.OnUnitSelected -= SetBannerStatus;
 
         Actions.OnRightClick -= PlaceBanner;
+        
+        Actions.OnUnitDeselected -= HideBanner;
     }
 
     private void HideBanner()
@@ -51,7 +55,6 @@ public class BannerHandler : MonoBehaviour
         else
         {
             HideBanner();
-            return;
         }
     }
 

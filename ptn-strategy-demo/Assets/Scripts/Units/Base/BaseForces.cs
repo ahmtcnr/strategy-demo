@@ -17,14 +17,19 @@ namespace Units.Base
 
         private bool isMoving;
 
-        private void OnEnable()
+
+        protected override void OnEnable()
         {
+            base.OnEnable();
+
             Actions.OnBuildSuccess += RecalculatePath;
             OnSelected += ActivateMovement;
         }
 
-        private void OnDisable()
+
+        protected override void OnDisable()
         {
+            base.OnDisable();
             Actions.OnBuildSuccess -= RecalculatePath;
             OnSelected -= ActivateMovement;
         }
@@ -73,7 +78,6 @@ namespace Units.Base
                     node.reservedUnit = this;
                     reservedNode = node;
                     transform.position = node.PivotWorldPosition;
-
                 }
                 else
                 {

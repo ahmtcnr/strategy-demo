@@ -10,10 +10,10 @@ PrefabInstance:
     - target: {fileID: 6878915998914466256, guid: 8ef29ce5f4b441c49bee1dcee0a313e3, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: a06461f15359d2a499576f77ac20f60a, type: 3}
+      objectReference: {fileID: 21300000, guid: 8b635c877213d394eab0369302f0484b, type: 3}
     - target: {fileID: 6878915998914466271, guid: 8ef29ce5f4b441c49bee1dcee0a313e3, type: 3}
       propertyPath: m_Name
-      value: StableButton
+      value: TurretButton
       objectReference: {fileID: 0}
     - target: {fileID: 6878915999083605216, guid: 8ef29ce5f4b441c49bee1dcee0a313e3, type: 3}
       propertyPath: m_Pivot.x
@@ -118,4 +118,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d4f509c5f50ac047883e0cd0ef74c16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentBuilding: {fileID: 0}
+  currentBuilding: {fileID: 8254104871566225394, guid: 7f19dfddc2195f74e8568c9a3a251161, type: 3}

@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class GridSystem : Singleton<GridSystem>
 {
-    public LayerMask UnwalkableLayer;
     public Vector2 gridBoundSize;
     public float nodeSize;
     public Node[,] nodes;
@@ -130,11 +129,11 @@ public class GridSystem : Singleton<GridSystem>
     public bool TryGetNearestWalkableNode(Vector2 worldPos, out Node node)
     {
         Node startNode = GetNodeFromWorldPos(worldPos);
-
+        
 
         Vector2Int checkIndex = Vector2Int.zero;
-        int max = 1;
-        int min = -1;
+        int max = 0;
+        int min = 0;
         int maxValue = Mathf.Max(gridSize.x, gridSize.y);
         while (true)
         {
@@ -188,38 +187,43 @@ public class GridSystem : Singleton<GridSystem>
     public int MaxGridSize => gridSize.x * gridSize.y;
 
 
-    private void OnDrawGizmos()
-    {
-        if (!isDrawGizmos) return;
-
-        //Grid Edges
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, new Vector2(gridBoundSize.x, gridBoundSize.y));
-
-        if (nodes != null)
-        {
-            foreach (var node in nodes)
-            {
-                if (!node.isWalkable)
-                {
-                    Gizmos.color = Color.magenta;
-                }
-                else
-                {
-                    Gizmos.color = Color.gray;
-                }
-
-                Gizmos.DrawCube(node.WorldPosition, Vector2.one * (nodeDiameter - 0.01f));
-            }
-
-            if (path.Count > 0)
-            {
-                for (int i = 0; i < path.Count - 1; i++)
-                {
-                    Gizmos.color = Color.yellow;
-                    Gizmos.DrawLine(path[i].WorldPosition, path[i + 1].WorldPosition);
-                }
-            }
-        }
-    }
+    // private void OnDrawGizmos()
+    // {
+    //     if (!isDrawGizmos) return;
+    //
+    //     //Grid Edges
+    //     Gizmos.color = Color.red;
+    //     Gizmos.DrawWireCube(transform.position, new Vector2(gridBoundSize.x, gridBoundSize.y));
+    //
+    //     if (nodes != null)
+    //     {
+    //         foreach (var node in nodes)
+    //         {
+    //             if (!node.isWalkable)
+    //             {
+    //                 Gizmos.color = Color.magenta;
+    //             }
+    //             else
+    //             {
+    //                 Gizmos.color = Color.gray;
+    //             }
+    //
+    //             if (node.isReserved)
+    //             {
+    //                 Gizmos.color = Color.blue;
+    //             }
+    //
+    //             Gizmos.DrawCube(node.WorldPosition, Vector2.one * (nodeDiameter - 0.01f));
+    //         }
+    //
+    //         if (path.Count > 0)
+    //         {
+    //             for (int i = 0; i < path.Count - 1; i++)
+    //             {
+    //                 Gizmos.color = Color.yellow;
+    //                 Gizmos.DrawLine(path[i].WorldPosition, path[i + 1].WorldPosition);
+    //             }
+    //         }
+    //     }
+    // }
 }

@@ -5,8 +5,9 @@ namespace Building
 {
     public class BuildPlacementHandler : MonoBehaviour
     {
-        private bool canBuild;
+        private bool isBuildingState;
         private BaseBuilding _currentBuilding;
+        [SerializeField] private LayerMask unitLayer;
 
         private void OnEnable()
         {
@@ -22,24 +23,30 @@ namespace Building
             Actions.OnDeselectBuilding -= Deselect;
         }
 
+
         private void SetBuildStatus(BaseBuilding baseBuilding)
         {
             _currentBuilding = baseBuilding;
-            canBuild = true;
+            isBuildingState = true;
         }
 
         private void Deselect()
         {
             _currentBuilding = null;
-            canBuild = false;
+            isBuildingState = false;
         }
 
         private void CheckConditions()
         {
-            if (!canBuild)
+            if (!isBuildingState)
                 return;
-            
-            if (GridSystem.Instance.IsNodesEmpty(_currentBuilding.baseUnitData.UnitSize))
+
+
+            Collider2D hitColliders =
+                Physics2D.OverlapBox((Vector2)GridSystem.Instance.GetNodeOnCursor().PivotWorldPosition + _currentBuilding.baseUnitData.UnitSize / 2,
+                    _currentBuilding.baseUnitData.UnitSize / 2, 0,
+                    unitLayer);
+            if (hitColliders == null)
             {
                 Actions.OnBuildSuccess?.Invoke(_currentBuilding);
                 Actions.OnDeselectBuilding?.Invoke();

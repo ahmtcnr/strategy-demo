@@ -20,7 +20,7 @@ namespace InformationPanel
             _infoPanelModel = infoPanelModel;
             
             Actions.OnUnitSelected += ProcessAndSetModelData;
-            Actions.OnDeselectUnit += ClearPanel;
+            Actions.OnUnitDeselected += ClearPanel;
             
         }
         private void ProcessAndSetModelData(BaseUnit baseUnit)
@@ -34,7 +34,7 @@ namespace InformationPanel
         }
         private void ClearPanel()
         {
-            //informationPanelView.ClearPanel();
+            _infoPanelModel.SelectedBaseUnit = null;
         }
         // private void Awake()
         // {

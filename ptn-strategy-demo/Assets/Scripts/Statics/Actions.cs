@@ -14,12 +14,10 @@ public static class Actions
     public static Action<BaseBuilding> OnBuildSuccess;
     
     public static Action OnDeselectBuilding;
-
     
-
     public static Action<BaseUnit> OnUnitSelected;
 
-    public static Action OnDeselectUnit;
+    public static Action OnUnitDeselected;
 
 
 

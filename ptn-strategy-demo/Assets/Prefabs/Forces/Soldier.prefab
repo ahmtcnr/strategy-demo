@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3591766276999101036}
   - component: {fileID: 2916574656795820226}
   - component: {fileID: 7902373141481510127}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Soldier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4661767567636441373}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpriteParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,7 +115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1438806571723789784}
   - component: {fileID: 1142275290196849123}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}

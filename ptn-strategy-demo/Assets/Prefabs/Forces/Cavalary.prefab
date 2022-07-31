@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9144934601548178209}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpriteParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 1116959846615167056}
   - component: {fileID: 1594687979709123326}
   - component: {fileID: 6049011559152934611}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cavalary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -115,7 +115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3291871302050455524}
   - component: {fileID: 3567576742254001119}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}

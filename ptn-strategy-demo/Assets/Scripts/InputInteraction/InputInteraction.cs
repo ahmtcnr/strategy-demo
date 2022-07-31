@@ -5,9 +5,8 @@ using UnityEngine;
 
 public class InputInteraction : Singleton<InputInteraction>
 {
-    
-    
     private Camera _mainCamera;
+    private RaycastHit2D[] _raycastResults = new RaycastHit2D[1];
 
     protected override void Awake()
     {
@@ -25,21 +24,41 @@ public class InputInteraction : Singleton<InputInteraction>
         Actions.OnLeftClick -= DetectObject;
     }
 
-    
+
     private void DetectObject()
     {
         Ray ray = _mainCamera.ScreenPointToRay(InputManager.Instance.GetMousePosition());
-        RaycastHit2D hits2D = Physics2D.GetRayIntersection(ray);
-        if (hits2D.collider != null && hits2D.collider.TryGetComponent(out ISelectable _ISelectable))
+        Physics2D.RaycastNonAlloc(ray.origin, ray.direction, _raycastResults);
+
+        if (!Equals(_raycastResults[0].collider, null))
         {
-            _ISelectable.OnClickAction();
+            if (_raycastResults[0].collider.TryGetComponent(out ISelectable _ISelectable))
+            {
+                _ISelectable.OnClickAction();
+                //break;
+            }
+            else
+            {
+                Actions.OnUnitDeselected?.Invoke();
+                Actions.OnUnitSelected?.Invoke(null);
+            }
         }
-        else if(hits2D.collider != null && hits2D.collider.name == "Ground")
-        {
-            Actions.OnUnitSelected?.Invoke(null);
-        }
+
+
+        // if (hits2D.collider != null)
+        // {   
+        //     if (hits2D.collider.TryGetComponent(out ISelectable _ISelectable))
+        //     {
+        //         _ISelectable.OnClickAction();
+        //     }
+        //     else
+        //     {
+        //         Actions.OnUnitDeselected?.Invoke();
+        //         Actions.OnUnitSelected?.Invoke(null);
+        //     }
+        // }
     }
-    
+
     public Vector3 GetMouseToWorldPosition()
     {
         Vector3 mousePosition = InputManager.Instance.GetMousePosition();

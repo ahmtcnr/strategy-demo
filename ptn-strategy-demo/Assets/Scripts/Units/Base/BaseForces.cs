@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using SOScripts;
 using UnityEngine;
 using System.Collections.Generic;
@@ -7,52 +8,99 @@ namespace Units.Base
 {
     public class BaseForces : BaseUnit
     {
-        float speed = 20;
         Vector3[] path;
         private Vector3 targetPos;
         int targetIndex;
 
+        public Node reservedNode;
+        private Coroutine _moveRoutine;
+
+        private bool isMoving;
+
+        private void OnEnable()
+        {
+            Actions.OnBuildSuccess += RecalculatePath;
+            OnSelected += ActivateMovement;
+        }
+
+        private void OnDisable()
+        {
+            Actions.OnBuildSuccess -= RecalculatePath;
+            OnSelected -= ActivateMovement;
+        }
+
         public void SetDestination(Vector3 targetPosition)
         {
-            StopCoroutine(FollowPath());
             //Debug.Log("Target node" + targetNode.gridIndex);
-            PathRequestManager.RequestPath(transform.position, targetPosition, OnPathFound);
-            targetPos = targetPosition;
+            if (GridSystem.Instance.TryGetNearestWalkableNode(targetPosition, out Node node))
+            {
+                PathRequestManager.RequestPath(transform.position, node.WorldPosition, OnPathFound, this);
+                targetPos = targetPosition;
+            }
+        }
+
+        private void ActivateMovement() => ListenDeselect();
+
+        private void ListenDeselect()
+        {
+            Actions.OnUnitDeselected += DeselectUnit;
+            Actions.OnRightClick += MoveToCursor;
+        }
+
+        private void DeselectUnit()
+        {
+            Actions.OnUnitDeselected -= DeselectUnit;
+            Actions.OnRightClick -= MoveToCursor;
+        }
+
+        private void MoveToCursor()
+        {
+            SetDestination(GridSystem.Instance.GetNodeOnCursor().PivotWorldPosition);
         }
 
 
-        public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
+        private void OnPathFound(Vector3[] newPath, bool pathSuccessful)
         {
-
             if (pathSuccessful)
             {
                 path = newPath;
                 targetIndex = 0;
-                StopCoroutine(FollowPath());
-                StartCoroutine(FollowPath());
+
+                if (path.Length == 0)
+                {
+                    var node = GridSystem.Instance.GetNodeFromWorldPos(transform.position);
+                    node.isReserved = true;
+                    node.reservedUnit = this;
+                    reservedNode = node;
+                    transform.position = node.PivotWorldPosition;
+
+                }
+                else
+                {
+                    if (_moveRoutine != null)
+                    {
+                        StopCoroutine(_moveRoutine);
+                    }
+
+                    _moveRoutine = StartCoroutine(FollowPath());
+                }
             }
             else
             {
-                // if (GridSystem.Instance.TryGetNearestWalkableNode(targetPos, out Node emptyNode))
-                // {
-                //     Debug.Log(":::"+emptyNode.gridIndex);
-                //     SetDestination(emptyNode.WorldPosition);
-                //     //this.targetNode = emptyNode;
-                // }
-                // else
-                // {
-                //     Debug.Log("whaaaa");
-                // }
             }
         }
 
-        IEnumerator FollowPath()
+        private IEnumerator FollowPath()
         {
-            if (path.Length == 0) yield break;
+            // if (reservedNode != null)
+            // {
+            //     reservedNode.isReserved = false;
+            // }
 
-            var node = GridSystem.Instance.GetNodeFromWorldPos(path[path.Length - 1]);
-            node.isReserved = true;
-            node.reservedUnit = this;
+            isMoving = true;
+            // capturedNode = GridSystem.Instance.GetNodeFromWorldPos(path[path.Length - 1]);
+            // capturedNode.isReserved = true;
+            // capturedNode.reservedUnit = this;
             Vector3 currentWaypoint = path[0];
             while (true)
             {
@@ -61,61 +109,53 @@ namespace Units.Base
                     targetIndex++;
                     if (targetIndex >= path.Length)
                     {
-                        // GridSystem.Instance.GetNodeFromWorldPos(transform.position) = true;
-                        // if (!GridSystem.Instance.GetNodeFromWorldPos(transform.position).isWalkable)
-                        // {
-                        //     if (GridSystem.Instance.TryGetNearestWalkableNode(transform.position,out Node node))
-                        //     {
-                        //         SetDestination(node);
-                        //         break;
-                        //     }
-                        //     
-                        // }
-                        if (GridSystem.Instance.GetNodeFromWorldPos(transform.position).reservedUnit == this)
-                        {
-                            GridSystem.Instance.GetNodeFromWorldPos(transform.position).isReserved = true;
-                        }
-                        else
+                        if (GridSystem.Instance.GetNodeFromWorldPos(transform.position).reservedUnit != this)
                         {
                             if (GridSystem.Instance.TryGetNearestWalkableNode(transform.position, out Node emptyNode))
                             {
                                 SetDestination(emptyNode.WorldPosition);
-                                //this.targetNode = emptyNode;
+                                isMoving = false;
                                 yield break;
                             }
                         }
 
-
+                        isMoving = false;
                         yield break;
                     }
 
                     currentWaypoint = path[targetIndex];
                 }
 
-                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, ((ForcesData)baseUnitData).moveSpeed * Time.deltaTime);
                 yield return null;
             }
         }
 
-        public void OnDrawGizmos()
+        private void RecalculatePath(BaseBuilding bb)
         {
-            if (path != null)
-            {
-                for (int i = targetIndex; i < path.Length; i++)
-                {
-                    Gizmos.color = Color.black;
-                    Gizmos.DrawCube(path[i], Vector3.one);
-
-                    if (i == targetIndex)
-                    {
-                        Gizmos.DrawLine(transform.position, path[i]);
-                    }
-                    else
-                    {
-                        Gizmos.DrawLine(path[i - 1], path[i]);
-                    }
-                }
-            }
+            if (!isMoving) return;
+            SetDestination(targetPos);
         }
+
+        // private void OnDrawGizmos()
+        // {
+        //     if (path != null)
+        //     {
+        //         for (int i = targetIndex; i < path.Length; i++)
+        //         {
+        //             Gizmos.color = Color.black;
+        //             Gizmos.DrawCube(path[i], Vector3.one);
+        //
+        //             if (i == targetIndex)
+        //             {
+        //                 Gizmos.DrawLine(transform.position, path[i]);
+        //             }
+        //             else
+        //             {
+        //                 Gizmos.DrawLine(path[i - 1], path[i]);
+        //             }
+        //         }
+        //     }
+        // }
     }
 }

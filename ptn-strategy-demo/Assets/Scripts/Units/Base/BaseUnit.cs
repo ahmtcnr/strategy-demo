@@ -11,9 +11,10 @@ public abstract class BaseUnit : MonoBehaviour, ISelectable
     [SerializeField] private SpriteRenderer unitSprite;
     [SerializeField] protected Transform spriteParent;
     
-    
     private BoxCollider2D _boxCollider2D;
-   
+
+    protected event Action OnSelected;
+    
     protected virtual void Awake()
     {
         unitSprite.sprite = baseUnitData.UnitSprite;
@@ -22,7 +23,9 @@ public abstract class BaseUnit : MonoBehaviour, ISelectable
 
     public void OnClickAction()
     {
+        Actions.OnUnitDeselected?.Invoke();
         Actions.OnUnitSelected?.Invoke(this);
+        OnSelected?.Invoke();
     }
     
     private void SetColliderSize()

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: -439838000082325802}
   - component: {fileID: 479654584841739141}
   - component: {fileID: 469723627279483400}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PowerPlant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6614186110161895778}
   - component: {fileID: 5181330479348868441}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 615877325589183911}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SpriteParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -32,15 +32,6 @@ namespace Units.Base
             OnSelected -= ActivateMovement;
         }
 
-        public void SetDestination(Vector3 targetPosition)
-        {
-            //Debug.Log("Target node" + targetNode.gridIndex);
-            if (GridSystem.Instance.TryGetNearestWalkableNode(targetPosition, out Node node))
-            {
-                PathRequestManager.RequestPath(transform.position, node.WorldPosition, OnPathFound, this);
-                _targetPos = targetPosition;
-            }
-        }
 
         private void ActivateMovement() => ListenDeselect();
 
@@ -63,7 +54,6 @@ namespace Units.Base
 
         private void OnPathFound(Vector3[] newPath, bool pathSuccessful)
         {
-            
             if (pathSuccessful)
             {
                 _path = newPath;
@@ -71,11 +61,16 @@ namespace Units.Base
 
                 if (_path.Length == 0)
                 {
-                    var node = GridSystem.Instance.GetNodeFromWorldPos(transform.position);
-                    node.IsReserved = true;
-                    node.ReservedUnit = this;
-                    ReservedNode = node;
-                    transform.position = node.PivotWorldPosition;
+                    if (ReservedNode != null)
+                    {
+                        ReservedNode.IsReserved = false;
+                        ReservedNode.ReservedUnit = null;
+                    }
+
+                    ReservedNode = GridSystem.Instance.GetNodeFromWorldPos(transform.position);
+                    ReservedNode.IsReserved = true;
+                    ReservedNode.ReservedUnit = this;
+                    transform.position = ReservedNode.PivotWorldPosition;
                 }
                 else
                 {
@@ -98,7 +93,7 @@ namespace Units.Base
                 if (transform.position == currentWaypoint)
                 {
                     _targetIndex++;
-                    if (_targetIndex >= _path.Length)
+                    if (_targetIndex >= _path.Length) // if the last node of the path is reserved, go to the nearest unreserved node 
                     {
                         if (GridSystem.Instance.GetNodeFromWorldPos(transform.position).ReservedUnit != this)
                         {
@@ -116,8 +111,8 @@ namespace Units.Base
 
                     currentWaypoint = _path[_targetIndex];
                 }
-                
-                
+
+
                 transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, ((ForcesData)baseUnitData).MoveSpeed * Time.deltaTime);
                 yield return null;
             }
@@ -127,6 +122,15 @@ namespace Units.Base
         {
             if (!_isMoving) return;
             SetDestination(_targetPos);
+        }
+
+        public void SetDestination(Vector3 targetPosition)
+        {
+            if (GridSystem.Instance.TryGetNearestWalkableNode(targetPosition, out Node node))
+            {
+                PathRequestManager.RequestPath(transform.position, node.WorldPosition, OnPathFound, this);
+                _targetPos = targetPosition;
+            }
         }
 
         #region Gizmos

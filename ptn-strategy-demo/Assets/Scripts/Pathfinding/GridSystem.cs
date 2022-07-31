@@ -141,6 +141,11 @@ public class GridSystem : Singleton<GridSystem>
     {
         Node startNode = GetNodeFromWorldPos(worldPos);
 
+        if (!startNode.IsReserved && startNode.IsWalkable )
+        {
+            node = startNode;
+            return true;
+        }
 
         Vector2Int checkIndex = Vector2Int.zero;
         int max = 0;

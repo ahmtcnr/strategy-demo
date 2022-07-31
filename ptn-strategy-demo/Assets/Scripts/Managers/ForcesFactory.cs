@@ -32,7 +32,7 @@ public class ForcesFactory : Singleton<ForcesFactory>
         // {
         //     while (true)
         //     {
-        //         if (GridSystem.Instance.TryGetNearestWalkableNode(position, out Node node))
+        //         if (GridSystem.Instance.TryGetNearestWalkableNode(spawnPosition, out Node node))
         //         {
         //             var spawnedForce = Instantiate(baseForce, node.PivotWorldPosition, Quaternion.identity);
         //

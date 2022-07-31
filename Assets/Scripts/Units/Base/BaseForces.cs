@@ -61,16 +61,7 @@ namespace Units.Base
 
                 if (_path.Length == 0)
                 {
-                    if (ReservedNode != null)
-                    {
-                        ReservedNode.IsReserved = false;
-                        ReservedNode.ReservedUnit = null;
-                    }
-
-                    ReservedNode = GridSystem.Instance.GetNodeFromWorldPos(transform.position);
-                    ReservedNode.IsReserved = true;
-                    ReservedNode.ReservedUnit = this;
-                    transform.position = ReservedNode.PivotWorldPosition;
+                    EmptyCurrentReservedNode();
                 }
                 else
                 {
@@ -81,6 +72,10 @@ namespace Units.Base
 
                     _moveRoutine = StartCoroutine(FollowPath());
                 }
+            }
+            else
+            {
+                EmptyCurrentReservedNode();
             }
         }
 
@@ -122,6 +117,21 @@ namespace Units.Base
         {
             if (!_isMoving) return;
             SetDestination(_targetPos);
+        }
+
+
+        private void EmptyCurrentReservedNode()
+        {
+            if (ReservedNode != null)
+            {
+                ReservedNode.IsReserved = false;
+                ReservedNode.ReservedUnit = null;
+            }
+
+            ReservedNode = GridSystem.Instance.GetNodeFromWorldPos(transform.position);
+            ReservedNode.IsReserved = true;
+            ReservedNode.ReservedUnit = this;
+            transform.position = ReservedNode.PivotWorldPosition;
         }
 
         public void SetDestination(Vector3 targetPosition)

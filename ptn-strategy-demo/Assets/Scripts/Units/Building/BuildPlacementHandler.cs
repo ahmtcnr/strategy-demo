@@ -5,9 +5,9 @@ namespace Building
 {
     public class BuildPlacementHandler : MonoBehaviour
     {
-        private bool isBuildingState;
-        private BaseBuilding _currentBuilding;
         [SerializeField] private LayerMask unitLayer;
+        private bool _isBuildingState;
+        private BaseBuilding _currentBuilding;
 
         private void OnEnable()
         {
@@ -27,18 +27,18 @@ namespace Building
         private void SetBuildStatus(BaseBuilding baseBuilding)
         {
             _currentBuilding = baseBuilding;
-            isBuildingState = true;
+            _isBuildingState = true;
         }
 
         private void Deselect()
         {
             _currentBuilding = null;
-            isBuildingState = false;
+            _isBuildingState = false;
         }
 
         private void CheckConditions()
         {
-            if (!isBuildingState)
+            if (!_isBuildingState)
                 return;
 
 

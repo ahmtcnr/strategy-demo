@@ -37,7 +37,6 @@ public abstract class BaseUnit : MonoBehaviour, ISelectable
 
     public void OnClickAction()
     {
-        
         Actions.OnUnitDeselected?.Invoke();
         Actions.OnUnitSelected?.Invoke(this);
         OnSelected?.Invoke();

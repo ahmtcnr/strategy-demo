@@ -8,15 +8,13 @@ namespace Units.Base
 {
     public class BaseForces : BaseUnit
     {
-        Vector3[] path;
-        private Vector3 targetPos;
-        int targetIndex;
-
-        public Node reservedNode;
+        public Node ReservedNode;
+        
+        private Vector3[] _path;
+        private Vector3 _targetPos;
+        private int _targetIndex;
         private Coroutine _moveRoutine;
-
-        private bool isMoving;
-
+        private bool _isMoving;
 
         protected override void OnEnable()
         {
@@ -40,7 +38,7 @@ namespace Units.Base
             if (GridSystem.Instance.TryGetNearestWalkableNode(targetPosition, out Node node))
             {
                 PathRequestManager.RequestPath(transform.position, node.WorldPosition, OnPathFound, this);
-                targetPos = targetPosition;
+                _targetPos = targetPosition;
             }
         }
 
@@ -63,20 +61,19 @@ namespace Units.Base
             SetDestination(GridSystem.Instance.GetNodeOnCursor().PivotWorldPosition);
         }
 
-
         private void OnPathFound(Vector3[] newPath, bool pathSuccessful)
         {
             if (pathSuccessful)
             {
-                path = newPath;
-                targetIndex = 0;
+                _path = newPath;
+                _targetIndex = 0;
 
-                if (path.Length == 0)
+                if (_path.Length == 0)
                 {
                     var node = GridSystem.Instance.GetNodeFromWorldPos(transform.position);
-                    node.isReserved = true;
-                    node.reservedUnit = this;
-                    reservedNode = node;
+                    node.IsReserved = true;
+                    node.ReservedUnit = this;
+                    ReservedNode = node;
                     transform.position = node.PivotWorldPosition;
                 }
                 else
@@ -89,57 +86,48 @@ namespace Units.Base
                     _moveRoutine = StartCoroutine(FollowPath());
                 }
             }
-            else
-            {
-            }
         }
 
         private IEnumerator FollowPath()
         {
-            // if (reservedNode != null)
-            // {
-            //     reservedNode.isReserved = false;
-            // }
-
-            isMoving = true;
-            // capturedNode = GridSystem.Instance.GetNodeFromWorldPos(path[path.Length - 1]);
-            // capturedNode.isReserved = true;
-            // capturedNode.reservedUnit = this;
-            Vector3 currentWaypoint = path[0];
+            _isMoving = true;
+            Vector3 currentWaypoint = _path[0];
             while (true)
             {
                 if (transform.position == currentWaypoint)
                 {
-                    targetIndex++;
-                    if (targetIndex >= path.Length)
+                    _targetIndex++;
+                    if (_targetIndex >= _path.Length)
                     {
-                        if (GridSystem.Instance.GetNodeFromWorldPos(transform.position).reservedUnit != this)
+                        if (GridSystem.Instance.GetNodeFromWorldPos(transform.position).ReservedUnit != this)
                         {
                             if (GridSystem.Instance.TryGetNearestWalkableNode(transform.position, out Node emptyNode))
                             {
                                 SetDestination(emptyNode.WorldPosition);
-                                isMoving = false;
+                                _isMoving = false;
                                 yield break;
                             }
                         }
 
-                        isMoving = false;
+                        _isMoving = false;
                         yield break;
                     }
 
-                    currentWaypoint = path[targetIndex];
+                    currentWaypoint = _path[_targetIndex];
                 }
 
-                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, ((ForcesData)baseUnitData).moveSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, ((ForcesData)baseUnitData).MoveSpeed * Time.deltaTime);
                 yield return null;
             }
         }
 
         private void RecalculatePath(BaseBuilding bb)
         {
-            if (!isMoving) return;
-            SetDestination(targetPos);
+            if (!_isMoving) return;
+            SetDestination(_targetPos);
         }
+
+        #region Gizmos
 
         // private void OnDrawGizmos()
         // {
@@ -161,5 +149,7 @@ namespace Units.Base
         //         }
         //     }
         // }
+
+        #endregion
     }
 }

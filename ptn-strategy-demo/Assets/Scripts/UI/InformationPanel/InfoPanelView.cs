@@ -20,29 +20,26 @@ namespace InformationPanel
         [SerializeField] private TMP_Text produceText;
         [SerializeField] private Image unitProduceImage;
 
-        private InfoPanelModel infoPanelModel;
+        private InfoPanelModel _infoPanelModel;
 
         private void Awake()
         {
-            infoPanelModel = new InfoPanelModel();
-
-            InfoPanelController infoPanelController = new InfoPanelController(infoPanelModel);
-
-
+            _infoPanelModel = new InfoPanelModel();
+            InfoPanelController infoPanelController = new InfoPanelController(_infoPanelModel);
             ClearPanel();
         }
 
         private void OnEnable()
         {
-            infoPanelModel.OnBaseUnitChanged += VisualiseUnitData;
+            _infoPanelModel.OnBaseUnitChanged += VisualiseUnitData;
         }
 
         private void OnDisable()
         {
-            infoPanelModel.OnBaseUnitChanged -= VisualiseUnitData;
+            _infoPanelModel.OnBaseUnitChanged -= VisualiseUnitData;
         }
 
-        public void VisualiseUnitData(BaseUnit baseUnit)
+        private void VisualiseUnitData(BaseUnit baseUnit)
         {
             if (baseUnit == null)
             {
@@ -53,8 +50,7 @@ namespace InformationPanel
             unitParent.SetActive(true);
             unitImage.sprite = baseUnit.baseUnitData.UnitSprite;
             unitName.text = baseUnit.baseUnitData.UnitName;
-            // Debug.Log(baseUnit.TryGetComponent(out BaseProducer bf));
-            if (baseUnit.TryGetComponent(out BaseProducer baseProducer)) //TODO: Find Another way
+            if (baseUnit.TryGetComponent(out BaseProducer baseProducer)) 
             {
                 produceParent.SetActive(true);
 
@@ -69,7 +65,7 @@ namespace InformationPanel
             }
         }
 
-        public void ClearPanel()
+        private void ClearPanel()
         {
             unitParent.SetActive(false);
             produceParent.SetActive(false);

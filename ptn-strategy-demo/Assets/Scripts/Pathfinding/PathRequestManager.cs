@@ -6,12 +6,12 @@ using UnityEngine;
 
 public class PathRequestManager : Singleton<PathRequestManager>
 {
-    Queue<PathRequest> pathRequestQueue = new Queue<PathRequest>();
-    PathRequest currentPathRequest;
+    private Queue<PathRequest> pathRequestQueue = new Queue<PathRequest>();
+    private PathRequest currentPathRequest;
 
-    Pathfinding pathfinding;
+    private Pathfinding pathfinding;
 
-    bool isProcessingPath;
+    private bool isProcessingPath;
 
     protected override void Awake()
     {
@@ -27,10 +27,6 @@ public class PathRequestManager : Singleton<PathRequestManager>
         Instance.TryProcessNext();
     }
 
-
-    private void Update()
-    {
-    }
 
     void TryProcessNext()
     {
@@ -48,18 +44,16 @@ public class PathRequestManager : Singleton<PathRequestManager>
         isProcessingPath = false;
         if (path.Length != 0)
         {
-            if (currentPathRequest.baseForces.reservedNode != null)
+            if (currentPathRequest.baseForces.ReservedNode != null)
             {
-                currentPathRequest.baseForces.reservedNode.isReserved = false;
+                currentPathRequest.baseForces.ReservedNode.IsReserved = false;
             }
+            // This allows the reserved node to be unreserved on the move and other units can now move here
             var reservedNode = GridSystem.Instance.GetNodeFromWorldPos(path[path.Length - 1]);
-            currentPathRequest.baseForces.reservedNode = reservedNode;
-            reservedNode.reservedUnit = currentPathRequest.baseForces;
-            reservedNode.isReserved = true;
+            currentPathRequest.baseForces.ReservedNode = reservedNode;
+            reservedNode.ReservedUnit = currentPathRequest.baseForces;
+            reservedNode.IsReserved = true;
         }
-
-       
-
         TryProcessNext();
     }
 

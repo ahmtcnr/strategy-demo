@@ -2,33 +2,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ProductionPanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class ProductionPanel : MonoBehaviour, IPointerDownHandler, IDragHandler
 {
     [SerializeField] private RectTransform productGroupParent;
-    [Range(0.01f,0.03f)]
-    [SerializeField] private float inputSensitivity = 0.0212f;
-    [Range(10f,70f)]
-    [SerializeField] private float deAccelerationRate = 30f;
-    
-    private List<GameObject> buildings = new List<GameObject>();
-    private ObjectPool buildingPool = new ObjectPool();
+    [Range(0.01f, 0.03f)] [SerializeField] private float inputSensitivity = 0.0212f;
+    [Range(10f, 70f)] [SerializeField] private float deAccelerationRate = 30f;
+
+    private List<GameObject> _buildings = new List<GameObject>();
+    private ObjectPool _buildingPool = new ObjectPool();
 
     private float _positiveThresholdTracker, _negativeThresholdTracker;
 
     private float _positiveDragVelocity, _negativeDragVelocity;
     private int _tailIndex, _headIndex;
 
-    private float initialOffset;
+    private float _initialOffset;
     public float offset;
 
     private void Awake()
     {
-        initialOffset = productGroupParent.GetChild(0).localPosition.y;
+        _initialOffset = productGroupParent.GetChild(0).localPosition.y;
         _tailIndex = productGroupParent.childCount;
 
         foreach (Transform building in productGroupParent)
         {
-            buildings.Add(building.gameObject);
+            _buildings.Add(building.gameObject);
         }
     }
 
@@ -46,13 +44,12 @@ public class ProductionPanel : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
                 for (int i = 0; i < overflowTracker - 1; i++)
                 {
-                    
-                    buildingPool.Push(buildings[buildings.Count - 1]);
+                    _buildingPool.Push(_buildings[_buildings.Count - 1]);
                     //Destroy(items[items.Count - 1]);
-                    buildings.RemoveAt(buildings.Count - 1);
-                    var pooled = buildingPool.Pull();
-                    pooled.transform.localPosition = new Vector3(0, _headIndex * offset + initialOffset, 0);
-                    buildings.Insert(0, pooled);
+                    _buildings.RemoveAt(_buildings.Count - 1);
+                    var pooled = _buildingPool.Pull();
+                    pooled.transform.localPosition = new Vector3(0, _headIndex * offset + _initialOffset, 0);
+                    _buildings.Insert(0, pooled);
                     _headIndex++;
                     _tailIndex--;
                 }
@@ -73,11 +70,11 @@ public class ProductionPanel : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
                 for (int i = 0; i < overflowTracker - 1; i++)
                 {
-                    buildingPool.Push(buildings[0]);
-                    buildings.RemoveAt(0);
-                    var spawned = buildingPool.Pull();
-                    spawned.transform.localPosition = new Vector3(0, -_tailIndex * offset + initialOffset, 0);
-                    buildings.Add(spawned);
+                    _buildingPool.Push(_buildings[0]);
+                    _buildings.RemoveAt(0);
+                    var spawned = _buildingPool.Pull();
+                    spawned.transform.localPosition = new Vector3(0, -_tailIndex * offset + _initialOffset, 0);
+                    _buildings.Add(spawned);
                     _tailIndex++;
                     _headIndex--;
                 }
@@ -89,15 +86,7 @@ public class ProductionPanel : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     {
         _positiveDragVelocity = 0;
         _negativeDragVelocity = 0;
-        
-        
-        
     }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-    }
-
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -106,17 +95,13 @@ public class ProductionPanel : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             _positiveDragVelocity = 0;
         }
 
-        if (_negativeDragVelocity> 0)
+        if (_negativeDragVelocity > 0)
         {
             _negativeDragVelocity = 0;
         }
-        
-        
+
+
         _positiveDragVelocity += eventData.delta.y * inputSensitivity;
         _negativeDragVelocity += eventData.delta.y * inputSensitivity;
     }
-    
-    
-    
-    
 }

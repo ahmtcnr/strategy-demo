@@ -9,7 +9,7 @@ public class BannerHandler : MonoBehaviour
 {
     [SerializeField] private GameObject bannerParent;
 
-    private bool canSetBanner;
+    private bool _canSetBanner;
     private BaseProducer _currentProducer;
 
     private void Awake()
@@ -38,7 +38,7 @@ public class BannerHandler : MonoBehaviour
 
     private void HideBanner()
     {
-        canSetBanner = false;
+        _canSetBanner = false;
         bannerParent.SetActive(false);
     }
 
@@ -48,9 +48,9 @@ public class BannerHandler : MonoBehaviour
         if (baseUnit != null && baseUnit.TryGetComponent(out BaseProducer baseProducer))
         {
             bannerParent.SetActive(true);
-            canSetBanner = true;
+            _canSetBanner = true;
             _currentProducer = baseProducer;
-            transform.position = baseProducer.bannerNode.PivotWorldPosition;
+            transform.position = baseProducer.BannerNode.PivotWorldPosition;
         }
         else
         {
@@ -60,10 +60,10 @@ public class BannerHandler : MonoBehaviour
 
     private void PlaceBanner()
     {
-        if (!canSetBanner) return;
+        if (!_canSetBanner) return;
 
         var targetNode = GridSystem.Instance.GetNodeOnCursor();
-        _currentProducer.bannerNode = targetNode;
+        _currentProducer.BannerNode = targetNode;
         transform.position = targetNode.PivotWorldPosition;
     }
 }

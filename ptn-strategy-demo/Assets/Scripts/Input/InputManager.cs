@@ -6,8 +6,6 @@ using UnityEngine.InputSystem;
 public class InputManager : Singleton<InputManager>
 {
     private InputActions _inputActions;
-
-
     protected override void Awake()
     {
         base.Awake();
@@ -51,12 +49,5 @@ public class InputManager : Singleton<InputManager>
     }
 
     public Vector2 GetMousePosition() => _inputActions.Mouse.Position.ReadValue<Vector2>();
-
-
-    public Vector2 DeltaPosition()
-    {
-        return _inputActions.Mouse.DeltaPosition.ReadValue<Vector2>();
-    }
-    
     
 }

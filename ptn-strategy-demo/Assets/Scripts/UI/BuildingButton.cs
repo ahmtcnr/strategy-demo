@@ -25,12 +25,9 @@ public class BuildingButton : MonoBehaviour
         _button.onClick.RemoveListener(Build);
     }
 
-    public void Build()
+    private void Build()
     {
-    
         Actions.OnBuildingUIClick?.Invoke(currentBuilding.baseUnitData);
         Actions.OnBuildingClick?.Invoke(currentBuilding);
     }
-
-  
 }

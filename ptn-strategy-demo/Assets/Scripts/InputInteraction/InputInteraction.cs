@@ -53,20 +53,6 @@ public class InputInteraction : Singleton<InputInteraction>
                 Actions.OnDeselectBuilding?.Invoke();
             }
         }
-
-
-        // if (hits2D.collider != null)
-        // {   
-        //     if (hits2D.collider.TryGetComponent(out ISelectable _ISelectable))
-        //     {
-        //         _ISelectable.OnClickAction();
-        //     }
-        //     else
-        //     {
-        //         Actions.OnUnitDeselected?.Invoke();
-        //         Actions.OnUnitSelected?.Invoke(null);
-        //     }
-        // }
     }
 
     public Vector3 GetMouseToWorldPosition()

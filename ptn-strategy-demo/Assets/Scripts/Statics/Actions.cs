@@ -1,31 +1,29 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using SOScripts;
-using UnityEngine;
-
-public static class Actions 
+public static class Actions
 {
-    
+    #region BuildingActions
+
     public static Action<BaseUnitData> OnBuildingUIClick;
 
     public static Action<BaseBuilding> OnBuildingClick;
 
     public static Action<BaseBuilding> OnBuildSuccess;
-    
+
     public static Action OnDeselectBuilding;
-    
+
+    #endregion
+
+    #region UnitSelection
+
     public static Action<BaseUnit> OnUnitSelected;
 
     public static Action OnUnitDeselected;
 
     public static Action OnLeftClickGround;
 
+    #endregion
 
-
-    
-    
-    
     #region InputActions
 
     public static Action OnLeftClick;
@@ -33,5 +31,4 @@ public static class Actions
     public static Action OnSpaceBarDown;
 
     #endregion
-
 }

@@ -8,13 +8,7 @@ namespace InformationPanel
 {
     public class InfoPanelController
     {
-        private InfoPanelModel _infoPanelModel;
-
-        // private InformationPanelData _processedData;
-        
-        
-        
-
+        private readonly InfoPanelModel _infoPanelModel;
         public InfoPanelController(InfoPanelModel infoPanelModel)
         {
             _infoPanelModel = infoPanelModel;
@@ -25,35 +19,11 @@ namespace InformationPanel
         }
         private void ProcessAndSetModelData(BaseUnit baseUnit)
         {
-
             _infoPanelModel.SelectedBaseUnit = baseUnit;
-
-            //informationPanelView.VisualiseUnitData(_processedData);
-
-
         }
         private void ClearPanel()
         {
             _infoPanelModel.SelectedBaseUnit = null;
         }
-        // private void Awake()
-        // {
-        //     _informationPanelModel = new InformationPanelModel();
-        // }
-
-        // private void OnEnable()
-        // {
-        //     Actions.OnUnitSelected += OnClickUnit;
-        //     Actions.OnDeselectUnit += ClearPanel;
-        // }
-        //
-        // private void OnDisable()
-        // {
-        //     Actions.OnUnitSelected -= OnClickUnit;
-        //     Actions.OnDeselectUnit -= ClearPanel;
-        // }
-
-
-        
     }
 }

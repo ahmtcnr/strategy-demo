@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
 public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
 {
     public static T Instance { get; private set; }
@@ -15,6 +14,7 @@ public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
         Destroy(gameObject);
     }
 }
+
 public abstract class Singleton<T> : StaticInstance<T> where T : MonoBehaviour
 {
     protected override void Awake()

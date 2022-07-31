@@ -47,7 +47,7 @@ public class Pathfinding : Singleton<Pathfinding>
 
             foreach (var neighbour in currentNode.neighbours)
             {
-                if (!neighbour.isWalkable || closedNodes.Contains(neighbour))
+                if (!neighbour.IsWalkable || closedNodes.Contains(neighbour))
                 {
                     continue;
                 }
@@ -57,7 +57,7 @@ public class Pathfinding : Singleton<Pathfinding>
                 {
                     neighbour.GCost = movementCostToNeighbour;
                     neighbour.HCost = GetDistance(neighbour, targetNode);
-                    neighbour.parent = currentNode;
+                    neighbour.Parent = currentNode;
                     if (!openNodes.Contains(neighbour))
                     {
                         openNodes.Add(neighbour);
@@ -87,7 +87,7 @@ public class Pathfinding : Singleton<Pathfinding>
         while (currentNode != startNode)
         {
             path.Add(currentNode);
-            currentNode = currentNode.parent;
+            currentNode = currentNode.Parent;
         }
 
         Vector3[] waypoints = NodeListToArray(path);
@@ -110,8 +110,8 @@ public class Pathfinding : Singleton<Pathfinding>
 
     private int GetDistance(Node nodeA, Node nodeB)
     {
-        int dstX = Mathf.Abs(nodeA.gridIndex.x - nodeB.gridIndex.x);
-        int dstY = Mathf.Abs(nodeA.gridIndex.y - nodeB.gridIndex.y);
+        int dstX = Mathf.Abs(nodeA.GridIndex.x - nodeB.GridIndex.x);
+        int dstY = Mathf.Abs(nodeA.GridIndex.y - nodeB.GridIndex.y);
 
         if (dstX > dstY)
             return 14 * dstY + 10 * (dstX - dstY);

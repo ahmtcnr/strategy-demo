@@ -7,7 +7,12 @@ public class ObjectPool
 
     private Stack<GameObject> _objectPool = new Stack<GameObject>();
     private GameObject prefab;
-    
+        
+    private void Spawn()
+    {
+        var spawnedObj=  Object.Instantiate(prefab);
+        _objectPool.Push(spawnedObj);
+    }
     public void CreatePool(GameObject poolObject, int count)
     {
         prefab = poolObject;
@@ -17,8 +22,6 @@ public class ObjectPool
         }
         
     }
-
-
     public GameObject Pull()
     {
         if (_objectPool.Count == 0)
@@ -31,13 +34,6 @@ public class ObjectPool
     public void Push(GameObject objectToPush)
     {
         _objectPool.Push(objectToPush);
-    }
-
-
-    private void Spawn()
-    {
-        var spawnedObj=  GameObject.Instantiate(prefab);
-        _objectPool.Push(spawnedObj);
     }
 
 }

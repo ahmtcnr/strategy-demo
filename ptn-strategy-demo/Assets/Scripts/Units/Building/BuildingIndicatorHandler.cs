@@ -6,17 +6,16 @@ using UnityEngine;
 
 public class BuildingIndicatorHandler : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer _spriteRenderer;
-    [SerializeField] private Transform _spriteParent;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Transform spriteParent;
 
     [SerializeField] private LayerMask unitLayer;
-    private bool isBuilding;
-    private Coroutine indicatorRoutine;
+    private bool _isBuilding;
+    private Coroutine _indicatorRoutine;
     private BaseUnitData _currentUnitData;
 
-    private Vector3 _cursorpos;
-
-    private Collider2D[] results = new Collider2D[1];
+    private Vector3 _cursorPos;
+    private Collider2D[] _results = new Collider2D[1];
 
     private Color forbiddenToBuildColor = Color.red;
     private Color safeToBuildColor = Color.green;
@@ -41,27 +40,27 @@ public class BuildingIndicatorHandler : MonoBehaviour
 
     private void Update()
     {
-        if (isBuilding)
+        if (_isBuilding)
         {
-            MyCollisions();
+            CheckUnitCollision();
         }
     }
 
 
-    void MyCollisions()
+    private void CheckUnitCollision()
     {
-        _cursorpos = GridSystem.Instance.GetNodeOnCursor().PivotWorldPosition;
+        _cursorPos = GridSystem.Instance.GetNodeOnCursor().PivotWorldPosition;
 
-        Physics2D.OverlapBoxNonAlloc((Vector2)_cursorpos + _currentUnitData.UnitSize / 2, _currentUnitData.UnitSize / 2, 0, results, unitLayer);
+        Physics2D.OverlapBoxNonAlloc((Vector2)_cursorPos + _currentUnitData.UnitSize / 2, _currentUnitData.UnitSize / 2, 0, _results, unitLayer);
 
-        if (!Equals(results[0], null))
+        if (!Equals(_results[0], null))
         {
-            results[0] = null;
-            _spriteRenderer.color = forbiddenToBuildColor;
+            _results[0] = null;
+            spriteRenderer.color = forbiddenToBuildColor;
         }
         else
         {
-            _spriteRenderer.color = safeToBuildColor;
+            spriteRenderer.color = safeToBuildColor;
         }
     }
 
@@ -69,32 +68,32 @@ public class BuildingIndicatorHandler : MonoBehaviour
     {
         while (true)
         {
-            _spriteParent.transform.position = GridSystem.Instance.GetNodeOnCursor().PivotWorldPosition;
+            spriteParent.transform.position = GridSystem.Instance.GetNodeOnCursor().PivotWorldPosition;
             yield return null;
         }
     }
 
     private void SetIndicator(BaseUnitData baseUnitData)
     {
-        isBuilding = true;
-        _spriteRenderer.gameObject.SetActive(true);
-        _spriteRenderer.sprite = baseUnitData.UnitSprite;
+        _isBuilding = true;
+        spriteRenderer.gameObject.SetActive(true);
+        spriteRenderer.sprite = baseUnitData.UnitSprite;
         _currentUnitData = baseUnitData;
-        if (indicatorRoutine == null)
+        if (_indicatorRoutine == null)
         {
-            indicatorRoutine = StartCoroutine(MoveIndicator());
+            _indicatorRoutine = StartCoroutine(MoveIndicator());
         }
     }
 
     private void DeactivateIndicator()
     {
-        isBuilding = false;
-        _spriteRenderer.gameObject.SetActive(false);
+        _isBuilding = false;
+        spriteRenderer.gameObject.SetActive(false);
 
-        if (indicatorRoutine != null)
+        if (_indicatorRoutine != null)
         {
-            StopCoroutine(indicatorRoutine);
-            indicatorRoutine = null;
+            StopCoroutine(_indicatorRoutine);
+            _indicatorRoutine = null;
         }
     }
 }

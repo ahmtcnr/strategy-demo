@@ -8,8 +8,6 @@ using Random = UnityEngine.Random;
 public class ForcesFactory : Singleton<ForcesFactory>
 {
     public Action<BaseForces, Vector3, Vector3> OnSpawnForces;
-
-
     private void OnEnable()
     {
         OnSpawnForces += SpawnForce;
@@ -19,13 +17,18 @@ public class ForcesFactory : Singleton<ForcesFactory>
     {
         OnSpawnForces -= SpawnForce;
     }
-
-
-    private void SpawnForce(BaseForces baseForce, Vector3 position, Vector3 targetPos)
+    private void SpawnForce(BaseForces baseForce, Vector3 spawnPosition, Vector3 targetPos)
     {
-        // StartCoroutine(yo());
+        if (GridSystem.Instance.TryGetNearestWalkableNode(spawnPosition, out Node node))
+        {
+            var spawnedForce = Instantiate(baseForce, node.WorldPosition, Quaternion.identity);
+            
+            spawnedForce.SetDestination(targetPos);
+        }
+        #region Test
+        // StartCoroutine(StressTest());
         //
-        // IEnumerator yo()
+        // IEnumerator StressTest()
         // {
         //     while (true)
         //     {
@@ -40,16 +43,11 @@ public class ForcesFactory : Singleton<ForcesFactory>
         //             yield break;
         //         }
         //
-        //         yield return new WaitForSeconds(0.05f);
+        //         yield return new WaitForSeconds(0.1f);
         //     }
         // }
-
         
-        if (GridSystem.Instance.TryGetNearestWalkableNode(position, out Node node))
-        {
-            var spawnedForce = Instantiate(baseForce, node.WorldPosition, Quaternion.identity);
-            
-            spawnedForce.SetDestination(targetPos);
-        }
+
+        #endregion
     }
 }

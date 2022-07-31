@@ -6,9 +6,7 @@ namespace Units.Base
     public class BaseProducer: BaseBuilding
     {
         [SerializeField] public BaseForces forcesToProduce;
-        
-        public Node bannerNode;
-        public Vector3 bannerPosition;
+        public Node BannerNode;
         
         protected override void Awake()
         {
@@ -21,19 +19,10 @@ namespace Units.Base
         {
             if (GridSystem.Instance.TryGetNearestWalkableNode(transform.position,out Node node))
             {
-                bannerNode = node;
-            }
-            else
-            {
-                Debug.Log("yoo");
+                BannerNode = node;
             }
         }
 
-        public void Produce()
-        {
-            ForcesFactory.Instance.OnSpawnForces?.Invoke(forcesToProduce,transform.position , bannerNode.PivotWorldPosition);
-        }
-
-
+        public void Produce() => ForcesFactory.Instance.OnSpawnForces?.Invoke(forcesToProduce,transform.position , BannerNode.PivotWorldPosition);
     }
 }

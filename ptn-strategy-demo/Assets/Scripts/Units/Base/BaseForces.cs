@@ -9,7 +9,7 @@ namespace Units.Base
     public class BaseForces : BaseUnit
     {
         public Node ReservedNode;
-        
+
         private Vector3[] _path;
         private Vector3 _targetPos;
         private int _targetIndex;
@@ -63,6 +63,7 @@ namespace Units.Base
 
         private void OnPathFound(Vector3[] newPath, bool pathSuccessful)
         {
+            
             if (pathSuccessful)
             {
                 _path = newPath;
@@ -115,7 +116,8 @@ namespace Units.Base
 
                     currentWaypoint = _path[_targetIndex];
                 }
-
+                
+                
                 transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, ((ForcesData)baseUnitData).MoveSpeed * Time.deltaTime);
                 yield return null;
             }

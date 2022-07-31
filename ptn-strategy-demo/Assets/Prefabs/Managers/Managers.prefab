@@ -161,8 +161,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1180c6c9d2622ce4b9e9b3c789e10af9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spriteRenderer: {fileID: 762160206645171489}
-  _spriteParent: {fileID: 762160205212517457}
+  spriteRenderer: {fileID: 762160206645171489}
+  spriteParent: {fileID: 762160205212517457}
   unitLayer:
     serializedVersion: 2
     m_Bits: 64

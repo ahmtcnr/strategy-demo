@@ -128,7 +128,7 @@ MonoBehaviour:
   productGroupParent: {fileID: 8926412603223747833}
   inputSensitivity: 0.0209
   deAccelerationRate: 14.4
-  offset: 120
+  trackOffset: 120
 --- !u!1 &8926412603223747834
 GameObject:
   m_ObjectHideFlags: 0

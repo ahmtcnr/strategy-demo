@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: PowerPlantData
   m_EditorClassIdentifier: 
   UnitSize: {x: 2, y: 3}
-  UnitSprite: {fileID: 21300000, guid: d3d31846f2ca1d748a00acb761415c21, type: 3}
+  UnitSprite: {fileID: 21300000, guid: 37c5655c745a598479be743a0ea4ff28, type: 3}
   UnitName: Power Plant

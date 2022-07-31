@@ -10,6 +10,7 @@ public class InputManager : Singleton<InputManager>
     {
         base.Awake();
         _inputActions = new InputActions();
+        Application.targetFrameRate = Int32.MaxValue;;
     }
 
     private void OnEnable()

@@ -17,7 +17,7 @@ public class ProductionPanel : MonoBehaviour, IPointerDownHandler, IDragHandler
     private int _tailIndex, _headIndex;
 
     private float _initialOffset;
-    public float offset;
+    [SerializeField] private float trackOffset;
 
     private void Awake()
     {
@@ -36,20 +36,19 @@ public class ProductionPanel : MonoBehaviour, IPointerDownHandler, IDragHandler
         {
             productGroupParent.transform.localPosition += new Vector3(0, _negativeDragVelocity, 0);
             _negativeThresholdTracker += _negativeDragVelocity;
-            var overflowTracker = Mathf.Abs(_negativeThresholdTracker / offset);
+            var overflowTracker = Mathf.Abs(_negativeThresholdTracker / trackOffset);
             _negativeDragVelocity += Time.deltaTime * deAccelerationRate;
             if (overflowTracker > 1)
             {
-                _negativeThresholdTracker %= offset;
-
+                _negativeThresholdTracker %= trackOffset;
+                GameObject pulledObject;
                 for (int i = 0; i < overflowTracker - 1; i++)
                 {
                     _buildingPool.Push(_buildings[_buildings.Count - 1]);
-                    //Destroy(items[items.Count - 1]);
                     _buildings.RemoveAt(_buildings.Count - 1);
-                    var pooled = _buildingPool.Pull();
-                    pooled.transform.localPosition = new Vector3(0, _headIndex * offset + _initialOffset, 0);
-                    _buildings.Insert(0, pooled);
+                    pulledObject = _buildingPool.Pull();
+                    pulledObject.transform.localPosition = new Vector3(0, _headIndex * trackOffset + _initialOffset, 0);
+                    _buildings.Insert(0, pulledObject);
                     _headIndex++;
                     _tailIndex--;
                 }
@@ -62,19 +61,19 @@ public class ProductionPanel : MonoBehaviour, IPointerDownHandler, IDragHandler
             productGroupParent.transform.localPosition += new Vector3(0, _positiveDragVelocity, 0);
 
             _positiveThresholdTracker += _positiveDragVelocity;
-            var overflowTracker = _positiveThresholdTracker / offset;
+            var overflowTracker = _positiveThresholdTracker / trackOffset;
             _positiveDragVelocity -= Time.deltaTime * deAccelerationRate;
             if (overflowTracker > 1)
             {
-                _positiveThresholdTracker %= offset;
-
+                _positiveThresholdTracker %= trackOffset;
+                GameObject pulledObject;
                 for (int i = 0; i < overflowTracker - 1; i++)
                 {
                     _buildingPool.Push(_buildings[0]);
                     _buildings.RemoveAt(0);
-                    var spawned = _buildingPool.Pull();
-                    spawned.transform.localPosition = new Vector3(0, -_tailIndex * offset + _initialOffset, 0);
-                    _buildings.Add(spawned);
+                    pulledObject = _buildingPool.Pull();
+                    pulledObject.transform.localPosition = new Vector3(0, -_tailIndex * trackOffset + _initialOffset, 0);
+                    _buildings.Add(pulledObject);
                     _tailIndex++;
                     _headIndex--;
                 }

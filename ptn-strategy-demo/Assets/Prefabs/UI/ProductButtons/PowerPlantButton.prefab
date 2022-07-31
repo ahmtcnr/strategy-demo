@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 6878915998914466256, guid: 8ef29ce5f4b441c49bee1dcee0a313e3, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: d3d31846f2ca1d748a00acb761415c21, type: 3}
+      objectReference: {fileID: 21300000, guid: 37c5655c745a598479be743a0ea4ff28, type: 3}
     - target: {fileID: 6878915998914466271, guid: 8ef29ce5f4b441c49bee1dcee0a313e3, type: 3}
       propertyPath: m_Name
       value: PowerPlantButton

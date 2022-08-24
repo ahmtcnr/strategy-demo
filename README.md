@@ -1,2 +1,2 @@
-# ptn-strategy-demo
+strategy-demo
  

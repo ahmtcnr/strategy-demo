@@ -1,9 +1,14 @@
- -A* Pathfinding
- -Grid Building 
- -MVC
- -Infinite Scrollview
+### -A* Pathfinding
+### -Grid Building 
+### -MVC
+### -Infinite Scrollview
  
- -
- ![Alt Text](https://media0.giphy.com/media/61XoYt11gGVA2QS2f2/giphy.gif?cid=790b761198714936cc2016f7f85fa7fc3904484eefb6b9a4&rid=giphy.gif)
- -
- ![Alt Text](https://media2.giphy.com/media/TtARuL3lRm6FKhp24c/giphy.gif?cid=790b76114a8207f0e440b0832e5ae40abccaa73868c364c7&rid=giphy.gif)
+ 
+ <img src="https://github.com/ahmtcnr/strategy-demo/blob/main/readme/1.gif" data-canonical-src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width="640" height="360" /> 
+ 
+ <img src="https://github.com/ahmtcnr/strategy-demo/blob/main/readme/2(2).gif" data-canonical-src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width="640" height="360" />
+ 
+
+ 
+
+
